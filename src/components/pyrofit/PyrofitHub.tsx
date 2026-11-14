@@ -11,8 +11,6 @@ import {
   Zap,
   Timer,
   ShoppingCart,
-  Database,
-  MessageSquare,
 } from 'lucide-react';
 import {
   AthleteProfileState,
@@ -33,7 +31,6 @@ import { ManufacturerAnalyticsPortal } from './ManufacturerAnalyticsPortal';
 import { AICopilotDrawer } from './AICopilotDrawer';
 import { LiveFuelingTimer } from './LiveFuelingTimer';
 import { CustomFuelStackBuilder } from './CustomFuelStackBuilder';
-import { SQLiteTerminal } from './SQLiteTerminal';
 
 interface PyrofitHubProps {
   onBackToMain?: () => void;
@@ -48,7 +45,6 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
   const [aiCopilotOpen, setAiCopilotOpen] = useState(false);
   const [liveTimerOpen, setLiveTimerOpen] = useState(false);
   const [stackBuilderOpen, setStackBuilderOpen] = useState(false);
-  const [sqlTerminalOpen, setSqlTerminalOpen] = useState(false);
 
   // Default Workout Input Vector
   const [workoutInput, setWorkoutInput] = useState<WorkoutInputVector>({
@@ -154,13 +150,6 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         >
           <ShoppingCart className="w-3.5 h-3.5" />
           Custom Fuel Stack
-        </button>
-        <button
-          onClick={() => setSqlTerminalOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 border border-emerald-500/50 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
-        >
-          <Database className="w-3.5 h-3.5" />
-          SQLite Terminal
         </button>
         <button
           onClick={() => setFeedbackModalOpen(true)}
@@ -310,12 +299,6 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         isOpen={stackBuilderOpen}
         onClose={() => setStackBuilderOpen(false)}
         targets={targets}
-      />
-
-      {/* SQLite Query Terminal */}
-      <SQLiteTerminal
-        isOpen={sqlTerminalOpen}
-        onClose={() => setSqlTerminalOpen(false)}
       />
     </div>
   );
