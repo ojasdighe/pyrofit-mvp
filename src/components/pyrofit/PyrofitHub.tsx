@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
+  Gauge,
 } from 'lucide-react';
 import {
   AthleteProfileState,
@@ -36,6 +37,7 @@ import { ManufacturerAnalyticsPortal } from './ManufacturerAnalyticsPortal';
 import { AICopilotDrawer } from './AICopilotDrawer';
 import { LiveFuelingTimer } from './LiveFuelingTimer';
 import { CustomFuelStackBuilder } from './CustomFuelStackBuilder';
+import { RaceSimulator } from './RaceSimulator';
 import { AthleteProfileView, computeProfileCompleteness } from './AthleteProfileView';
 import { ProductCompareView } from './ProductCompareView';
 import { FeedbackView } from './FeedbackView';
@@ -112,6 +114,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
   const [aiCopilotOpen, setAiCopilotOpen] = useState(false);
   const [liveTimerOpen, setLiveTimerOpen] = useState(false);
   const [stackBuilderOpen, setStackBuilderOpen] = useState(false);
+  const [raceSimOpen, setRaceSimOpen] = useState(false);
 
   // ── Session history ───────────────────────────────────────────────────────
   const [sessionHistoryOpen, setSessionHistoryOpen] = useState(false);
@@ -302,6 +305,13 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         >
           <ShoppingCart className="w-3.5 h-3.5" />
           Custom Fuel Stack
+        </button>
+        <button
+          onClick={() => setRaceSimOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 border border-strava/50 bg-strava/10 hover:bg-strava/20 text-strava text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+        >
+          <Gauge className="w-3.5 h-3.5" />
+          Race Simulator
         </button>
         <button
           onClick={() => setFeedbackModalOpen(true)}
@@ -558,6 +568,15 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         onClose={() => setStackBuilderOpen(false)}
         targets={targets}
       />
+
+      {raceSimOpen && (
+        <RaceSimulator
+          isOpen={raceSimOpen}
+          onClose={() => setRaceSimOpen(false)}
+          input={workoutInput}
+          targets={targets}
+        />
+      )}
     </div>
   );
 };

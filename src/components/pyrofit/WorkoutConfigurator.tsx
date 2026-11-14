@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Flame,
   Activity,
@@ -8,9 +8,11 @@ import {
   ShieldAlert,
   ArrowRight,
   Sliders,
+  Loader2,
 } from 'lucide-react';
 import { IntensityLevel, ProductTier, WorkoutInputVector } from '../../types/pyrofit';
 import { getTemperatureClimateLabel } from '../../lib/fuelEngine';
+import { fetchWeatherByCity, WeatherResult } from '../../lib/weatherService';
 
 interface WorkoutConfiguratorProps {
   input: WorkoutInputVector;
@@ -27,8 +29,40 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
 }) => {
   const climate = getTemperatureClimateLabel(input.temperature_celsius);
 
+  // Live Weather state
+  const [weatherCity, setWeatherCity] = useState('');
+  const [isWeatherLoading, setIsWeatherLoading] = useState(false);
+  const [weatherResult, setWeatherResult] = useState<WeatherResult | null>(null);
+  const [weatherError, setWeatherError] = useState<string | null>(null);
+  const [wetBulbC, setWetBulbC] = useState<number | null>(null);
+
   const setField = <K extends keyof WorkoutInputVector>(key: K, val: WorkoutInputVector[K]) => {
     onChange({ ...input, [key]: val });
+  };
+
+  const handleFetchWeather = async () => {
+    setIsWeatherLoading(true);
+    setWeatherError(null);
+    setWeatherResult(null);
+    try {
+      const result = await fetchWeatherByCity(weatherCity.trim());
+      if (result) {
+        onChange({
+          ...input,
+          temperature_celsius: result.temperature_c,
+          humidity_pct: result.humidity_pct,
+          wet_bulb_c: result.wet_bulb_c,
+        });
+        setWeatherResult(result);
+        setWetBulbC(result.wet_bulb_c);
+      } else {
+        setWeatherError(
+          "Could not fetch weather for '" + weatherCity.trim() + "' — enter temperature manually."
+        );
+      }
+    } finally {
+      setIsWeatherLoading(false);
+    }
   };
 
   return (
@@ -135,7 +169,12 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
               <input
                 type="number"
                 value={input.temperature_celsius}
-                onChange={(e) => setField('temperature_celsius', parseFloat(e.target.value) || 20)}
+                onChange={(e) => {
+                  setWeatherResult(null);
+                  setWetBulbC(null);
+                  setWeatherError(null);
+                  setField('temperature_celsius', parseFloat(e.target.value) || 20);
+                }}
                 step="0.5"
                 min="0"
                 max="50"
@@ -150,6 +189,47 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
               {input.temperature_celsius > 30 && 'Severe heat stress. Sodium requirement surges +40% with high sweat electrolyte dissipation.'}
             </div>
           </div>
+        </div>
+
+        {/* Live Weather */}
+        <div className="p-4 bg-surface border border-border space-y-3">
+          <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold flex items-center gap-2">
+            <Thermometer className="w-3.5 h-3.5" /> Live Weather Fetch
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={weatherCity}
+              onChange={(e) => setWeatherCity(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && weatherCity.trim() && !isWeatherLoading) handleFetchWeather(); }}
+              placeholder="City name, e.g. Pune"
+              className="flex-1 bg-carbon border border-border px-4 py-2 text-fg font-space text-sm focus:border-strava outline-none"
+            />
+            <button
+              type="button"
+              onClick={handleFetchWeather}
+              disabled={!weatherCity.trim() || isWeatherLoading}
+              className="px-4 py-2 border border-strava bg-strava/10 hover:bg-strava/20 text-strava text-xs font-space font-bold uppercase tracking-wider transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
+            >
+              {isWeatherLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
+              {isWeatherLoading ? 'Fetching...' : 'Fetch Live Weather'}
+            </button>
+          </div>
+          {weatherResult && (
+            <div className="px-3 py-2 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 text-xs font-space font-bold flex flex-wrap items-center gap-2">
+              🌤 {weatherResult.city_name} · {weatherResult.temperature_c}°C · {weatherResult.humidity_pct}% RH · Wet-bulb {weatherResult.wet_bulb_c}°C
+            </div>
+          )}
+          {weatherResult && wetBulbC !== null && wetBulbC > 28 && (
+            <div className="px-3 py-2 bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs font-space">
+              ⚠ High wet-bulb temperature ({wetBulbC}°C) — evaporative cooling is impaired. Sodium targets are automatically elevated.
+            </div>
+          )}
+          {weatherError && (
+            <div className="px-3 py-2 bg-red-500/10 border border-red-500/40 text-red-400 text-xs font-space">
+              {weatherError}
+            </div>
+          )}
         </div>
 
         {/* 4. Athlete Weight & Cramping History Switch */}

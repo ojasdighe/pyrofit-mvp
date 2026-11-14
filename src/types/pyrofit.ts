@@ -16,6 +16,7 @@ export interface WorkoutInputVector {
   humidity_pct?: number;
   terrain?: 'Road' | 'Trail' | 'Track' | 'Treadmill';
   fluid_access?: 'Full' | 'Limited' | 'Self-Carry';
+  wet_bulb_c?: number;
 }
 
 export interface CalculatedHourlyTargets {
