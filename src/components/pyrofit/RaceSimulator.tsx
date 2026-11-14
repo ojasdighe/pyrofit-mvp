@@ -153,12 +153,6 @@ export const RaceSimulator: React.FC<RaceSimulatorProps> = ({
               onChange={(e) => setRacePos(parseInt(e.target.value, 10))}
               className="w-full accent-strava cursor-pointer h-2 bg-carbon"
             />
-            <div className="bg-surface border border-border h-2 w-full">
-              <div
-                className="bg-strava h-2 transition-all"
-                style={{ width: `${(racePos / input.workout_duration_mins) * 100}%` }}
-              />
-            </div>
             <div className="flex justify-between text-[10px] font-space text-faint">
               <span>Start</span>
               <span>Finish ({input.workout_duration_mins} min)</span>

@@ -7,7 +7,6 @@ import {
 import { sqliteEngine } from './sqliteEngine';
 
 const TELEMETRY_STORAGE_KEY = 'pyrofit_telemetry_events_v1';
-const ATHLETE_PROFILE_KEY = 'pyrofit_athlete_profile_v1';
 
 export const generateUUID = (): string => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -35,83 +34,7 @@ export const getStoredTelemetryEvents = (): TelemetryPayload[] => {
   try {
     const raw = localStorage.getItem(TELEMETRY_STORAGE_KEY);
     if (!raw) {
-      // Seed with sample manufacturer outbound leads for realistic analytics view
-      const sampleEvents: TelemetryPayload[] = [
-        {
-          click_id: 'evt_sample_01',
-          athlete_id: 'ath_mumbai_marathon_09',
-          timestamp: new Date(Date.now() - 3600000 * 3).toISOString(),
-          product_metadata: {
-            product_id: 'prod_m1',
-            brand_name: 'Maurten',
-            product_name: 'GEL 100',
-            tier: 'L1',
-            official_target_url: 'https://www.maurten.com/products/gel-100',
-          },
-          workout_context: {
-            duration_mins: 150,
-            intensity: 'HIGH',
-            temperature_celsius: 31.5,
-            environmental_factor_E: 1.4,
-            cramping_history_flag: false,
-          },
-          calculated_targets: {
-            carbs_hourly_g: 90,
-            sodium_hourly_mg: 560,
-            fluids_hourly_ml: 700,
-          },
-        },
-        {
-          click_id: 'evt_sample_02',
-          athlete_id: 'ath_bangalore_ultra_22',
-          timestamp: new Date(Date.now() - 3600000 * 8).toISOString(),
-          product_metadata: {
-            product_id: 'prod_u1',
-            brand_name: 'Unived',
-            product_name: 'Elite Energy Gel',
-            tier: 'L1',
-            official_target_url: 'https://www.unived.in/product/unived-elite-energy-gel/',
-          },
-          workout_context: {
-            duration_mins: 120,
-            intensity: 'MID',
-            temperature_celsius: 27.0,
-            environmental_factor_E: 1.2,
-            cramping_history_flag: true,
-          },
-          calculated_targets: {
-            carbs_hourly_g: 60,
-            sodium_hourly_mg: 680,
-            fluids_hourly_ml: 600,
-          },
-        },
-        {
-          click_id: 'evt_sample_03',
-          athlete_id: 'ath_delhi_half_55',
-          timestamp: new Date(Date.now() - 3600000 * 14).toISOString(),
-          product_metadata: {
-            product_id: 'prod_f2',
-            brand_name: 'Fast&Up',
-            product_name: 'Reload Hydration',
-            tier: 'L2',
-            official_target_url: 'https://www.fastandup.in/products/reload-electrolyte-drink',
-          },
-          workout_context: {
-            duration_mins: 90,
-            intensity: 'HIGH',
-            temperature_celsius: 33.0,
-            environmental_factor_E: 1.4,
-            cramping_history_flag: true,
-          },
-          calculated_targets: {
-            carbs_hourly_g: 36,
-            sodium_hourly_mg: 760,
-            fluids_hourly_ml: 700,
-          },
-        },
-      ];
-      localStorage.setItem(TELEMETRY_STORAGE_KEY, JSON.stringify(sampleEvents));
-      return sampleEvents;
+      return [];
     }
     return JSON.parse(raw);
   } catch (err) {

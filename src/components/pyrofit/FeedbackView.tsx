@@ -122,8 +122,24 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
     // 3. Notify parent
     onProfileUpdated(updatedProfile, notes);
 
-    // 4. Persist profile to localStorage
+    // 4. Persist AthleteProfileState to localStorage
     localStorage.setItem(PROFILE_KEY, JSON.stringify(updatedProfile));
+
+    // 4b. Also patch FullAthleteProfile multipliers so they stay in sync
+    try {
+      const rawFull = localStorage.getItem('pyrofit_full_profile_v2');
+      if (rawFull) {
+        const fullProfile = JSON.parse(rawFull);
+        fullProfile.carb_multiplier = updatedProfile.carb_multiplier;
+        fullProfile.sodium_multiplier = updatedProfile.sodium_multiplier;
+        fullProfile.filter_isotonic_only = updatedProfile.filter_isotonic_only;
+        fullProfile.historical_cramping = updatedProfile.historical_cramping;
+        fullProfile.total_workouts_logged = updatedProfile.total_workouts_logged;
+        localStorage.setItem('pyrofit_full_profile_v2', JSON.stringify(fullProfile));
+      }
+    } catch {
+      // non-fatal
+    }
 
     // 5. Log to SQLite
     try {
