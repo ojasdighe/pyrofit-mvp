@@ -70,6 +70,11 @@ class SQLiteEngine {
           { name: 'carbs_hourly_g', type: 'REAL' },
           { name: 'sodium_hourly_mg', type: 'REAL' },
           { name: 'fluids_hourly_ml', type: 'REAL' },
+          { name: 'budget_tier', type: 'TEXT' },
+          { name: 'cramping_history', type: 'INTEGER' },
+          { name: 'session_type', type: 'TEXT' },
+          { name: 'terrain', type: 'TEXT' },
+          { name: 'distance_km', type: 'REAL' },
           { name: 'created_at', type: 'TEXT' },
         ],
       },
@@ -307,6 +312,82 @@ class SQLiteEngine {
       table.rows.push(row);
     }
     this.saveToStorage();
+  }
+
+  /**
+   * Log a completed workout session configuration + calculated targets
+   */
+  public logWorkoutSession(data: {
+    session_id: string;
+    athlete_id: string;
+    duration_mins: number;
+    intensity_level: string;
+    temp_celsius: number;
+    env_factor: number;
+    carbs_hourly_g: number;
+    sodium_hourly_mg: number;
+    fluids_hourly_ml: number;
+    budget_tier: string;
+    cramping_history: boolean;
+    session_type?: string;
+    terrain?: string;
+    distance_km?: number;
+  }) {
+    const table = this.tables.get('workout_sessions');
+    if (!table) return;
+    const row = {
+      session_id: data.session_id,
+      athlete_id: data.athlete_id,
+      duration_mins: data.duration_mins,
+      intensity_level: data.intensity_level,
+      temp_celsius: data.temp_celsius,
+      env_factor: data.env_factor,
+      carbs_hourly_g: data.carbs_hourly_g,
+      sodium_hourly_mg: data.sodium_hourly_mg,
+      fluids_hourly_ml: data.fluids_hourly_ml,
+      budget_tier: data.budget_tier,
+      cramping_history: data.cramping_history ? 1 : 0,
+      session_type: data.session_type ?? 'Training',
+      terrain: data.terrain ?? 'Road',
+      distance_km: data.distance_km ?? null,
+      created_at: new Date().toISOString(),
+    };
+    table.rows.unshift(row);
+    // Keep max 100 sessions
+    if (table.rows.length > 100) table.rows = table.rows.slice(0, 100);
+    this.saveToStorage();
+  }
+
+  /**
+   * Returns the N most recent workout sessions
+   */
+  public getWorkoutSessions(limit: number = 5): Record<string, any>[] {
+    const table = this.tables.get('workout_sessions');
+    if (!table) return [];
+    return table.rows.slice(0, limit);
+  }
+
+  /**
+   * Export telemetry_events table as a CSV string
+   */
+  public exportTelemetryCSV(): string {
+    const table = this.tables.get('telemetry_events');
+    if (!table || table.rows.length === 0) return '';
+    const cols = table.schema.columns.map((c) => c.name);
+    const lines: string[] = [cols.join(',')];
+    for (const row of table.rows) {
+      const vals = cols.map((c) => {
+        const v = row[c];
+        if (v === null || v === undefined) return '';
+        const s = String(v);
+        // Quote fields that contain commas or quotes
+        return s.includes(',') || s.includes('"') || s.includes('\n')
+          ? `"${s.replace(/"/g, '""')}"`
+          : s;
+      });
+      lines.push(vals.join(','));
+    }
+    return lines.join('\n');
   }
 
   /**
