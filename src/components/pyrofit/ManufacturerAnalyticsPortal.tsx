@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { TelemetryPayload } from '../../types/pyrofit';
 import { clearTelemetryEvents, getStoredTelemetryEvents } from '../../lib/telemetryLogger';
+import { sqliteEngine } from '../../lib/sqliteEngine';
 
 interface ManufacturerAnalyticsPortalProps {
   onClose?: () => void;
@@ -42,6 +43,21 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
     dlAnchor.setAttribute('href', dataStr);
     dlAnchor.setAttribute('download', `pyrofit_b2b_telemetry_${Date.now()}.json`);
     dlAnchor.click();
+  };
+
+  const handleDownloadCSV = () => {
+    const csv = sqliteEngine.exportTelemetryCSV();
+    if (!csv) {
+      alert('No telemetry data to export.');
+      return;
+    }
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pyrofit_telemetry_${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   // Compute Brand Analytics
@@ -83,6 +99,13 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
             title="Download full JSON dataset"
           >
             <Download className="w-3.5 h-3.5" /> Export JSON
+          </button>
+          <button
+            onClick={handleDownloadCSV}
+            className="px-3.5 py-2 border border-border bg-surface hover:text-emerald-400 text-emerald-400 text-xs font-space font-bold uppercase transition-colors flex items-center gap-1.5"
+            title="Download telemetry as CSV"
+          >
+            <Download className="w-3.5 h-3.5" /> Export CSV
           </button>
           <button
             onClick={handleClear}

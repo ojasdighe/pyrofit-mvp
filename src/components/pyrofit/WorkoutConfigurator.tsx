@@ -229,7 +229,124 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
         </div>
       </div>
 
-      {/* CTA Button */}
+      {/* 6. Session Type */}
+      <div>
+        <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+          Session Type
+        </label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {(['Training', 'Race', 'Long Run', 'Recovery'] as const).map((t) => {
+            const active = (input.session_type ?? 'Training') === t;
+            return (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setField('session_type', t)}
+                className={`p-3 text-left border text-xs font-space transition-all ${
+                  active
+                    ? 'border-strava bg-strava/15 text-fg font-bold'
+                    : 'border-border bg-surface text-muted hover:text-fg'
+                }`}
+              >
+                {t}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 7. Terrain */}
+      <div>
+        <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+          Terrain
+        </label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {(['Road', 'Trail', 'Track', 'Treadmill'] as const).map((t) => {
+            const active = (input.terrain ?? 'Road') === t;
+            return (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setField('terrain', t)}
+                className={`p-3 text-left border text-xs font-space transition-all ${
+                  active
+                    ? 'border-strava bg-strava/15 text-fg font-bold'
+                    : 'border-border bg-surface text-muted hover:text-fg'
+                }`}
+              >
+                {t}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 8. Fluid Access */}
+      <div>
+        <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+          Fluid Access
+        </label>
+        <div className="grid grid-cols-3 gap-2">
+          {(['Full', 'Limited', 'Self-Carry'] as const).map((f) => {
+            const active = (input.fluid_access ?? 'Full') === f;
+            return (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setField('fluid_access', f)}
+                className={`p-3 text-left border text-xs font-space transition-all ${
+                  active
+                    ? 'border-strava bg-strava/15 text-fg font-bold'
+                    : 'border-border bg-surface text-muted hover:text-fg'
+                }`}
+              >
+                {f}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 9. Distance & Humidity (optional compact row) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="p-4 bg-surface border border-border">
+          <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+            Distance (km, optional)
+          </label>
+          <input
+            type="number"
+            value={input.distance_km ?? ''}
+            onChange={(e) => {
+              const v = e.target.value;
+              setField('distance_km', v === '' ? undefined : parseFloat(v));
+            }}
+            min={0}
+            max={300}
+            step={0.5}
+            placeholder="e.g. 42.2"
+            className="bg-carbon border border-border px-4 py-2 text-fg font-space text-sm w-full focus:border-strava outline-none placeholder:text-faint"
+          />
+        </div>
+
+        <div className="p-4 bg-surface border border-border">
+          <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+            Humidity (%, optional)
+          </label>
+          <input
+            type="number"
+            value={input.humidity_pct ?? ''}
+            onChange={(e) => {
+              const v = e.target.value;
+              setField('humidity_pct', v === '' ? undefined : parseFloat(v));
+            }}
+            min={0}
+            max={100}
+            step={1}
+            placeholder="e.g. 75"
+            className="bg-carbon border border-border px-4 py-2 text-fg font-space text-sm w-full focus:border-strava outline-none placeholder:text-faint"
+          />
+        </div>
+      </div>
       <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-[10px] font-space text-faint uppercase tracking-widest">
           Deterministic Mathematical Engine · Zero AI Guesswork · Sports Science Consensus
