@@ -71,7 +71,7 @@ export const App: React.FC = () => {
               onClick={() => setViewMode('landing')}
               className="text-xs font-space uppercase tracking-widest text-muted hover:text-strava flex items-center gap-1.5 transition-colors"
             >
-              ← Back to STRIDD Overview
+              ← Back to Overview
             </button>
             <span className="text-[10px] font-space text-faint uppercase">
               Zero In-App Checkout · Official Brand Direct Links Only
