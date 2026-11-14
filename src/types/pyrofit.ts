@@ -104,6 +104,26 @@ export interface TelemetryPayload {
 
 export type FeedbackOutcome = 'CRAMPING' | 'BLOATING' | 'CRASH' | 'OPTIMAL';
 
+// Aliases for compatibility with sqliteEngine / aiCopilot using snake_case field names
+export interface PhaseStrategyPlanAlt {
+  pre_workout: {
+    active: boolean;
+    timing_window: string;
+    carbs_target_g: number;
+    fluids_target_ml: number;
+  };
+  during_workout: {
+    interval_mins: number;
+    carbs_hourly_g: number;
+    sodium_hourly_mg: number;
+    fluids_hourly_ml: number;
+  };
+  post_workout: {
+    protein_target_g: number;
+    carbs_target_g: number;
+  };
+}
+
 export interface PostWorkoutFeedbackEntry {
   feedback_id: string;
   timestamp: string;

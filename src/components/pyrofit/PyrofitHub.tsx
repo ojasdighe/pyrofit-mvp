@@ -8,8 +8,11 @@ import {
   Smartphone,
   Monitor,
   CheckCircle,
-  ShieldCheck,
   Zap,
+  Timer,
+  ShoppingCart,
+  Database,
+  MessageSquare,
 } from 'lucide-react';
 import {
   AthleteProfileState,
@@ -22,10 +25,15 @@ import {
   getRecommendedProductPlan,
 } from '../../lib/fuelEngine';
 import { getOrCreateAthleteId } from '../../lib/telemetryLogger';
+import { sqliteEngine } from '../../lib/sqliteEngine';
 import { WorkoutConfigurator } from './WorkoutConfigurator';
 import { FuelingStrategyView } from './FuelingStrategyView';
 import { AdaptiveFeedbackModal } from './AdaptiveFeedbackModal';
 import { ManufacturerAnalyticsPortal } from './ManufacturerAnalyticsPortal';
+import { AICopilotDrawer } from './AICopilotDrawer';
+import { LiveFuelingTimer } from './LiveFuelingTimer';
+import { CustomFuelStackBuilder } from './CustomFuelStackBuilder';
+import { SQLiteTerminal } from './SQLiteTerminal';
 
 interface PyrofitHubProps {
   onBackToMain?: () => void;
@@ -35,6 +43,12 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
   const [activeScreen, setActiveScreen] = useState<'config' | 'strategy' | 'analytics'>('config');
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [androidFrameMode, setAndroidFrameMode] = useState(false);
+
+  // ── New feature modal states ──
+  const [aiCopilotOpen, setAiCopilotOpen] = useState(false);
+  const [liveTimerOpen, setLiveTimerOpen] = useState(false);
+  const [stackBuilderOpen, setStackBuilderOpen] = useState(false);
+  const [sqlTerminalOpen, setSqlTerminalOpen] = useState(false);
 
   // Default Workout Input Vector
   const [workoutInput, setWorkoutInput] = useState<WorkoutInputVector>({
@@ -66,6 +80,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
   useEffect(() => {
     try {
       localStorage.setItem('pyrofit_athlete_profile_v1', JSON.stringify(profile));
+      sqliteEngine.syncAthleteProfile(profile);
     } catch {}
   }, [profile]);
 
@@ -74,14 +89,19 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
   const phasePlan = allocate3PhaseStrategy(workoutInput, targets, profile);
   const recommendedProducts = getRecommendedProductPlan(targets, phasePlan, workoutInput, profile);
 
-  const handleProfileUpdated = (updated: AthleteProfileState) => {
+  const handleProfileUpdated = (updated: AthleteProfileState, _notes?: string[]) => {
     setProfile(updated);
   };
+
+  const allDuringProducts = [
+    ...recommendedProducts.duringGels,
+    ...recommendedProducts.duringHydration,
+  ];
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8">
       {/* Platform Title & Subheader */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-border">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-border">
         <div>
           <div className="flex items-center gap-2 text-strava font-space text-[10px] tracking-[0.5em] uppercase font-bold">
             <Flame className="w-4 h-4 text-strava" />
@@ -97,7 +117,6 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
 
         {/* View Mode & Nav Controls */}
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Android Mobile Frame Toggle */}
           <button
             onClick={() => setAndroidFrameMode(!androidFrameMode)}
             className={`px-3 py-2 border text-xs font-space font-bold uppercase transition-all flex items-center gap-1.5 ${
@@ -108,9 +127,48 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
             title="Toggle Android Device Frame Preview"
           >
             {androidFrameMode ? <Smartphone className="w-4 h-4" /> : <Monitor className="w-4 h-4" />}
-            <span>{androidFrameMode ? 'Android Native Frame' : 'Full Canvas'}</span>
+            <span>{androidFrameMode ? 'Android Frame' : 'Full Canvas'}</span>
           </button>
         </div>
+      </div>
+
+      {/* ── Feature Launcher Bar ── */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        <button
+          onClick={() => setAiCopilotOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 border border-strava/50 bg-strava/10 hover:bg-strava/20 text-strava text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          AI Sports Scientist
+        </button>
+        <button
+          onClick={() => { setActiveScreen('strategy'); setTimeout(() => setLiveTimerOpen(true), 100); }}
+          className="flex items-center gap-1.5 px-3 py-2 border border-sky-500/50 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+        >
+          <Timer className="w-3.5 h-3.5" />
+          Live Fueling Timer
+        </button>
+        <button
+          onClick={() => setStackBuilderOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+        >
+          <ShoppingCart className="w-3.5 h-3.5" />
+          Custom Fuel Stack
+        </button>
+        <button
+          onClick={() => setSqlTerminalOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 border border-emerald-500/50 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+        >
+          <Database className="w-3.5 h-3.5" />
+          SQLite Terminal
+        </button>
+        <button
+          onClick={() => setFeedbackModalOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 border border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+          Post-Workout Survey
+        </button>
       </div>
 
       {/* Screen Navigation Tabs */}
@@ -217,6 +275,8 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         </div>
       </div>
 
+      {/* ── All Modals & Drawers ── */}
+
       {/* Screen 3: Post-Workout Adaptive Survey Modal */}
       <AdaptiveFeedbackModal
         isOpen={feedbackModalOpen}
@@ -224,6 +284,38 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         workoutInput={workoutInput}
         currentProfile={profile}
         onProfileUpdated={handleProfileUpdated}
+      />
+
+      {/* AI Sports Scientist Copilot Drawer */}
+      <AICopilotDrawer
+        isOpen={aiCopilotOpen}
+        onClose={() => setAiCopilotOpen(false)}
+        input={workoutInput}
+        targets={targets}
+        phasePlan={phasePlan}
+        profile={profile}
+      />
+
+      {/* Live Fueling Timer */}
+      <LiveFuelingTimer
+        isOpen={liveTimerOpen}
+        onClose={() => setLiveTimerOpen(false)}
+        input={workoutInput}
+        targets={targets}
+        recommendedProducts={allDuringProducts}
+      />
+
+      {/* Custom Fuel Stack Builder */}
+      <CustomFuelStackBuilder
+        isOpen={stackBuilderOpen}
+        onClose={() => setStackBuilderOpen(false)}
+        targets={targets}
+      />
+
+      {/* SQLite Query Terminal */}
+      <SQLiteTerminal
+        isOpen={sqlTerminalOpen}
+        onClose={() => setSqlTerminalOpen(false)}
       />
     </div>
   );

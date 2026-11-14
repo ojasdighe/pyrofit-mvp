@@ -15,6 +15,7 @@ import {
   WorkoutInputVector,
 } from '../../types/pyrofit';
 import { applyAdaptiveFeedback } from '../../lib/fuelEngine';
+import { sqliteEngine } from '../../lib/sqliteEngine';
 
 interface AdaptiveFeedbackModalProps {
   isOpen: boolean;
@@ -48,6 +49,22 @@ export const AdaptiveFeedbackModal: React.FC<AdaptiveFeedbackModalProps> = ({
     );
     setFeedbackResult({ profile: updatedProfile, notes: appliedNotes });
     onProfileUpdated(updatedProfile, appliedNotes);
+
+    // Persist to SQLite
+    try {
+      sqliteEngine.logFeedbackUpdate({
+        athlete_id: currentProfile.athlete_id,
+        outcome,
+        workout_duration: workoutInput.workout_duration_mins,
+        workout_intensity: workoutInput.intensity_level,
+        workout_temp: workoutInput.temperature_celsius,
+        carb_multiplier_before: currentProfile.carb_multiplier,
+        carb_multiplier_after: updatedProfile.carb_multiplier,
+        sodium_multiplier_before: currentProfile.sodium_multiplier,
+        sodium_multiplier_after: updatedProfile.sodium_multiplier,
+        isotonic_locked: updatedProfile.filter_isotonic_only,
+      });
+    } catch {}
   };
 
   const handleResetProfile = () => {

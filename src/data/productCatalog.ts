@@ -123,3 +123,6 @@ export const SEED_PRODUCT_CATALOG: FuelProduct[] = [
     tag: 'Electrolyte Precision',
   },
 ];
+
+// Alias for convenience
+export const SEED_PRODUCTS = SEED_PRODUCT_CATALOG;

@@ -4,6 +4,14 @@ import {
   TelemetryPayload,
   WorkoutInputVector,
 } from '../types/pyrofit';
+// SQLite engine imported lazily to avoid circular deps
+let _sqliteEngine: any = null;
+const getSQLiteEngine = () => {
+  if (!_sqliteEngine) {
+    import('./sqliteEngine').then((m) => { _sqliteEngine = m.sqliteEngine; });
+  }
+  return _sqliteEngine;
+};
 
 const TELEMETRY_STORAGE_KEY = 'pyrofit_telemetry_events_v1';
 const ATHLETE_PROFILE_KEY = 'pyrofit_athlete_profile_v1';
@@ -169,6 +177,17 @@ export const handleOutboundManufacturerClick = (
   } catch (e) {
     console.error('Failed to persist telemetry payload locally', e);
   }
+
+  // 3b. Also write into SQLite engine
+  try {
+    const engine = getSQLiteEngine();
+    if (engine) engine.logTelemetryEvent(payload);
+    // Fallback: trigger async import and write
+    import('./sqliteEngine').then((m) => {
+      _sqliteEngine = m.sqliteEngine;
+      m.sqliteEngine.logTelemetryEvent(payload);
+    }).catch(() => {});
+  } catch {}
 
   // 4. Open external browser intent navigating directly to official_url
   if (typeof window !== 'undefined') {
