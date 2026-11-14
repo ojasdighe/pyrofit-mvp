@@ -11,6 +11,11 @@ export interface WorkoutInputVector {
   cramping_history: boolean; // C
   athlete_weight_kg: number; // W
   budget_tier_preference: ProductTier;
+  session_type?: 'Training' | 'Race' | 'Long Run' | 'Recovery';
+  distance_km?: number;
+  humidity_pct?: number;
+  terrain?: 'Road' | 'Trail' | 'Track' | 'Treadmill';
+  fluid_access?: 'Full' | 'Limited' | 'Self-Carry';
 }
 
 export interface CalculatedHourlyTargets {
@@ -65,6 +70,22 @@ export interface FuelProduct {
   official_url: string;
   price_inr: number;
   tag: string;
+  manufacturer_slug: string;
+  origin: 'DOMESTIC_INDIA' | 'INTERNATIONAL';
+  category: 'Energy Gels' | 'Carbohydrate Drink Mixes' | 'Electrolyte & Hydration Products' | 'Recovery Nutrition' | 'Energy Bars & Chews';
+  serving_size_g_or_ml?: number;
+  calories_kcal?: number;
+  sugars_g?: number;
+  potassium_mg?: number;
+  magnesium_mg?: number;
+  caffeine_mg?: number;
+  dietary_tags: string[];
+  anti_doping_certified: boolean;
+  data_confidence: 'HIGH' | 'MEDIUM' | 'LOW';
+  verified_date?: string;
+  cost_per_25g_carb?: number | null;
+  cost_per_500mg_sodium?: number | null;
+  cost_per_20g_protein?: number | null;
 }
 
 export interface AthleteProfileState {
@@ -131,4 +152,46 @@ export interface PostWorkoutFeedbackEntry {
   intensity: IntensityLevel;
   outcome: FeedbackOutcome;
   adjustments_applied: string[];
+}
+
+// ── Section 2.1 / 2.2 — Full Athlete Profile ──
+export type Sport = 'Running' | 'Cycling' | 'Triathlon' | 'Trail' | 'Other';
+export type Experience = 'Beginner' | 'Intermediate' | 'Elite';
+export type Goal = 'Finish' | 'PR / Time Target' | 'Base Building' | 'Recovery';
+export type GISensitivity = 'None' | 'Mild' | 'Severe / Bloating';
+export type Diet = 'Omnivore' | 'Vegetarian' | 'Vegan' | 'Jain';
+export type Allergen = 'Dairy' | 'Soy' | 'Gluten' | 'Nuts' | 'Caffeine';
+export type CaffeineUse = 'None' | 'Low' | 'Moderate' | 'High';
+export type BrandOriginPref = 'ALL' | 'DOMESTIC_INDIA' | 'INTERNATIONAL';
+export type AntiDopingStatus = 'Recreational' | 'Tested / WADA-Informed Choice Only';
+export type TrainingPhase = 'Base' | 'Build' | 'Peak' | 'Taper' | 'Race';
+
+export interface FullAthleteProfile {
+  athlete_id: string;
+  sport: Sport;
+  experience: Experience;
+  goal: Goal;
+  weight_kg: number;
+  sweat_rate_l_hr?: number;        // if set, overrides fluids formula
+  gi_sensitivity: GISensitivity;
+  diet: Diet;
+  allergies: Allergen[];
+  current_supplements: string[];
+  caffeine_use: CaffeineUse;
+  brand_origin_pref: BrandOriginPref;
+  budget_tier: ProductTier;
+  anti_doping_status: AntiDopingStatus;
+  medical_flags: { hypertension: boolean; diabetes: boolean; renal: boolean; notes: string };
+  weekly_volume_hrs: number;
+  training_phase: TrainingPhase;
+  event_date?: string;             // ISO date string — drives race countdown
+  event_distance_km?: number;
+  sleep_hrs?: number;
+  recovery_score?: number;         // 1–10
+  fatigue_score?: number;          // 1–10
+  carb_multiplier: number;
+  sodium_multiplier: number;
+  filter_isotonic_only: boolean;
+  historical_cramping: boolean;
+  total_workouts_logged: number;
 }
