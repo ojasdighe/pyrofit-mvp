@@ -3,6 +3,7 @@ import {
   CalculatedHourlyTargets,
   FeedbackOutcome,
   FuelProduct,
+  FullAthleteProfile,
   IntensityLevel,
   PhaseStrategyPlan,
   WorkoutInputVector,
@@ -80,8 +81,11 @@ export const calculateHourlyTargets = (
   const rawSodiumHourly = (400 * E + C * 200) * (profile.sodium_multiplier || 1.0);
   const sodiumHourly = Math.round(rawSodiumHourly);
 
-  // Hourly Fluids
-  const fluidsHourly = Math.round(500 * E);
+  // If athlete has set a custom sweat rate, override the fluids formula
+  const sweatRateOverride = (input as any)._sweat_rate_l_hr as number | undefined;
+  const fluidsHourly = sweatRateOverride && sweatRateOverride > 0
+    ? Math.round(sweatRateOverride * 1000 * E)
+    : Math.round(500 * E);
 
   return {
     environmental_factor_E: E,
@@ -255,3 +259,48 @@ export const applyAdaptiveFeedback = (
   updated.total_workouts_logged += 1;
   return { updatedProfile: updated, appliedNotes };
 };
+
+/**
+ * Cost-efficiency metrics per spec Section 5.4
+ */
+export function computeCostEfficiency(p: FuelProduct): {
+  cost_per_25g_carb: number | null;
+  cost_per_500mg_sodium: number | null;
+  cost_per_20g_protein: number | null;
+} {
+  return {
+    cost_per_25g_carb: p.carbs_g > 0 ? Math.round((p.price_inr / p.carbs_g) * 25 * 100) / 100 : null,
+    cost_per_500mg_sodium: p.sodium_mg > 0 ? Math.round((p.price_inr / p.sodium_mg) * 500 * 100) / 100 : null,
+    cost_per_20g_protein: p.protein_g > 0 ? Math.round((p.price_inr / p.protein_g) * 20 * 100) / 100 : null,
+  };
+}
+
+/**
+ * Filter product catalog by athlete profile constraints
+ */
+export function filterProductsByProfile(
+  profile: FullAthleteProfile,
+  catalog: FuelProduct[]
+): FuelProduct[] {
+  return catalog.filter((p) => {
+    const tags = (p.dietary_tags || []).map((t) => t.toLowerCase());
+    if (profile.brand_origin_pref !== 'ALL' && p.origin !== profile.brand_origin_pref) return false;
+    if (profile.budget_tier !== 'ALL' && p.tier !== profile.budget_tier) return false;
+    if (profile.anti_doping_status === 'Tested / WADA-Informed Choice Only' && !p.anti_doping_certified) return false;
+    if (profile.gi_sensitivity === 'Severe / Bloating') {
+      const safe = ['hydrogel', 'isotonic gel', 'isotonic powder'];
+      if (!safe.some((s) => (p.formulation_type || '').toLowerCase().includes(s))) return false;
+    }
+    for (const allergen of profile.allergies) {
+      if (allergen === 'Caffeine') {
+        if (profile.caffeine_use === 'None' && (p.caffeine_mg || 0) > 0) return false;
+      } else if (p.data_confidence === 'HIGH') {
+        if (!tags.includes(`${allergen.toLowerCase()}-free`)) return false;
+      }
+    }
+    if (profile.diet === 'Vegan' && !tags.includes('vegan')) return false;
+    if (profile.diet === 'Vegetarian' && !tags.includes('vegetarian') && !tags.includes('vegan')) return false;
+    if (profile.diet === 'Jain' && !tags.includes('jain')) return false;
+    return true;
+  });
+}
