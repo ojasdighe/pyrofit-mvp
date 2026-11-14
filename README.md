@@ -1,91 +1,78 @@
-# STRIDD (stridd.run) — High-Fidelity Clone
+# STRIDD + PYROFIT MVP — Athlete Fueling & Outbound Lead Telemetry Platform
 
-A pixel-perfect, fully-functional clone of **[STRIDD (stridd.run)](https://stridd.run)** — an elite running training plans & blueprints platform built on 10 training methodologies (Norwegian Double Threshold, Daniels VDOT, Lydiard Aerobic Base, Hansons Cumulative Fatigue, Maffetone MAF, Galloway Run-Walk, etc.).
-
----
-
-## 🚀 Features Replicated
-
-1. **Aesthetic & Design System**:
-   - **Color Palette**: High-contrast dark carbon theme (`#080808`), Volt yellow / neon lime accent (`#CCFF00`), Strava orange (`#FC4C02`), dark surface cards (`#131313`, `#1a1a1a`), subtle borders (`#262626`).
-   - **Typography**: Google Fonts `Oswald` (bold condensed italic display headings `italic-heavy`), `Inter` (body copy), and `Space Grotesk` (data labels, metrics, badges).
-   - **Animated Marquee Ticker**: `STRIDD.RUN // FREE TO USE // OPTIONAL ACCOUNT // 10 METHODOLOGIES...`
-   - **Service Notice**: Strava API sunset banner & Garmin / Suunto / COROS integration context.
-   - **Interactive Theme Switcher**: Toggle between Dark mode (`#080808`) and Light mode.
-
-2. **The Architect Engine (`src/lib/architectEngine.ts`)**:
-   - **Jack Daniels VDOT Pacing**: Derives 7 calibrated training zones (Easy, Recovery, Tempo, Interval, Long, Marathon Pace, Hill).
-   - **Riegel Race Prediction Formula**: $T_2 = T_1 \times (D_2 / D_1)^{1.06}$ for predicting finish times and equivalent performances.
-   - **10 Methodologies**:
-     - *Norwegian Model*: Double Threshold precision sessions.
-     - *Daniels VDOT*: Pacing science calibrated from VO₂max.
-     - *Lydiard*: Massive aerobic base before sharpening.
-     - *Hansons*: Long run capped at 26km with cumulative fatigue.
-     - *Maffetone (MAF)*: 180-minus-age heart rate ceiling.
-     - *FIRST (3+2)*: 3 quality days + 2 cross-training.
-     - *Kenyan Progression*: Progressive pace acceleration.
-     - *Galloway Run-Walk*: Strategic walk breaks for beginners.
-     - *Van Aaken*: 95% slow volume + sprint neurology.
-     - *Japanese Ekiden*: High-volume group endurance blocks.
-   - **Periodisation Curves**: Base, Build, Peak, Taper phases with scheduled recovery weeks every 3–4 weeks.
-
-3. **Interactive Plan Generator (`PlanGeneratorModal.tsx`)**:
-   - Distance selection (5K, 10K, Half Marathon, Marathon, Custom Ultra km).
-   - Goal strategy (Target Finish Time vs. Just Finish Healthy).
-   - Athlete fitness level calibration (Beginner, Intermediate, Advanced, Elite).
-   - Custom weekly training days picker (Mon–Sun) with long run assignment.
-   - Automatic or manual methodology assignment with explanatory reasoning.
-   - Confetti celebration upon generation!
-
-4. **Couch-to-5K Foundation Mode**:
-   - Dedicated onboarding for complete beginners.
-   - 4 Motivations (First 5K, Weight Loss, Running with Friends, Doctor's Orders).
-   - 4 Activity levels (Brisk walker, Occasional walks, Zero exercise, Post-injury).
-   - Progressive 8-week run-walk schedule with motivational coaching notes for each week.
-
-5. **Full Weekly Schedule & Workout Inspector (`PlanViewerModal.tsx`)**:
-   - Week-by-week selector ribbon.
-   - Phase badge, target volume, and quality sessions counter.
-   - 7-day workout cards with archetype color badges.
-   - Expandable detailed session drawer:
-     - Structured interval step breakdowns (Warm-up, Work reps, Recovery jogs, Cool-down).
-     - Target pace range ($min/km$).
-     - Physiological goals ("What" & "Why").
-     - Heart rate targets & conversational effort landmarks.
-   - CSV Export & Print view!
-
-6. **Running Mathematics Calculators (`CalculatorsModal.tsx`)**:
-   - **Race Predictor**: Instant Riegel projection across 5K, 10K, Half, Full, 50K.
-   - **VDOT Pace Calculator**: Exact Jack Daniels training intensity zones.
-   - **Pace Converter**: Min/km $\leftrightarrow$ Min/mile $\leftrightarrow$ km/h $\leftrightarrow$ mph.
-
-7. **All Content Sections**:
-   - Hero banner with split image & metric stats.
-   - Four Ways In (Pick a race, Start from zero, Chase a VDOT, Train through life).
-   - Training Science ("Every km has a job").
-   - What You Get ("Your plan. Decoded.").
-   - More Than A Plan.
-   - STRIDD Run Club.
-   - Go Deeper (11 interactive knowledge cards).
-   - The Running Lab (Gear & shoe guides, comparisons, best-of).
-   - The Four Levers (Consistency, Periodisation, Specificity, Recovery).
-   - Real Athlete Testimonials (Sneha, Arjun, Meera, Vikram, Deepa, Karthik).
-   - Accordion FAQ with all 11 questions.
-   - Full Multi-column Footer.
+A comprehensive, enterprise-grade athlete endurance platform combining the **STRIDD Training Architect** with the **Pyrofit MVP** (Athlete Fueling & Outbound Lead Telemetry Platform).
 
 ---
 
-## 🛠️ Quick Start
+## 🔥 Pyrofit MVP Architecture & Features
 
-```bash
-# Navigate to the project
+### 1. Zero In-App E-Commerce & Pure Outbound Manufacturer Referrals
+- **Zero Transactions**: Pyrofit **never** handles payments, carts, or checkout flows.
+- **Direct Official Webstores**: Every recommendation links exclusively to the manufacturer's verified web store (`maurten.com`, `unived.in`, `fastandup.in`, `enerzal.com`). 3rd-party marketplaces (Amazon, Flipkart) are strictly prohibited.
+- **Telemetry Logger**: Every outgoing recommendation click records session context, product ID, tier, targets, and athlete ID before launching the external browser intent.
+
+### 2. Deterministic Mathematical Calculation Engine (`src/lib/fuelEngine.ts`)
+- **Environmental Factor ($E$)**:
+  - $T < 22^\circ\text{C}$ (Cool): $E = 1.0$
+  - $22^\circ\text{C} \le T \le 30^\circ\text{C}$ (Moderate): $E = 1.2$
+  - $T > 30^\circ\text{C}$ (Hot / Indian Summer): $E = 1.4$
+- **Intensity Modifier ($I_{\text{modifier}}$)**:
+  - `LOW`: $0.8$
+  - `MID`: $1.0$
+  - `HIGH`: $1.2$
+- **Hourly Carbohydrate Requirement**:
+  - $D \le 60\text{m}$: $0\text{g/hr}$
+  - $60 < D \le 120\text{m}$: $30\text{g} \times I_{\text{modifier}}$
+  - $120 < D \le 180\text{m}$: $60\text{g} \times I_{\text{modifier}}$
+  - $D > 180\text{m}$: $90\text{g} \times I_{\text{modifier}}$
+  - $\text{Carbs}_{\text{hourly}} = \min(\text{Carbs}_{\text{base}} \times \text{carb\_multiplier}_{\text{ML}}, 90\text{g})$ (strict 90g/hr biological ceiling)
+- **Hourly Sodium Requirement**:
+  - $\text{Sodium}_{\text{hourly}} = [(400\text{mg} \times E) + (C \times 200\text{mg})] \times \text{sodium\_multiplier}_{\text{ML}}$
+- **Hourly Fluid Requirement**:
+  - $\text{Fluids}_{\text{hourly}} = 500\text{ml} \times E$
+
+### 3. 3-Phase Timeline Strategy Allocation
+1. **PRE-WORKOUT (Priming)**:
+   - Active if $D > 90$ mins (45–60 mins prior).
+   - $1.0\text{g Carbs / kg Body Weight} (1.0 \times W) + 300\text{ml Water}$.
+   - Fast gastric-emptying carbs; avoid fats, proteins, and heavy fiber.
+2. **DURING-WORKOUT (Sustained Intake)**:
+   - Deployed in 40–45 minute intervals.
+   - Exact hourly calculated $\text{Carbs}_{\text{hourly}}$, $\text{Sodium}_{\text{hourly}}$, and $\text{Fluids}_{\text{hourly}}$.
+3. **POST-WORKOUT (Recovery Phase)**:
+   - Within 30 minutes of session completion.
+   - $20\text{g} - 25\text{g}$ protein with a $3:1$ to $4:1$ Carbohydrate-to-Protein ratio.
+
+### 4. Product Catalog Schema & Seed Data (`src/data/productCatalog.ts`)
+- **Maurten GEL 100** (`prod_m1`, L1, Hydrogel)
+- **Unived Elite Energy Gel** (`prod_u1`, L1, Isotonic Gel)
+- **Fast&Up Energy Gel** (`prod_f1`, L2, Standard Gel)
+- **Fast&Up Reload Hydration** (`prod_f2`, L2, Electrolyte Effervescent)
+- **Enerzal Energy Drink Powder** (`prod_e1`, L3, Isotonic Powder)
+- **Unived RPRO Recovery Mix** (`prod_u2`, L1, Vegan Protein + Carb)
+- **Maurten Drink Mix 160** (`prod_m2`, L1, Pre-Workout Priming)
+- **Unived Pure Electrolyte Salt Caps** (`prod_u3`, L1, Pure Electrolytes)
+
+### 5. Adaptive Post-Workout Machine Learning Feedback Loop
+- **Severe Cramping**: Auto-adjusts sodium target baseline by $+15\%$ (`sodium_multiplier += 0.15`).
+- **Stomach Bloating**: Locks catalog recommendations exclusively to Hydrogel & Isotonic formulations (`filter_isotonic_only = true`).
+- **Energy Crash**: Auto-adjusts carbohydrate target by $+15\%$ (`carb_multiplier += 0.15`).
+- **Optimal Fueling**: Logs verified protocol without negative adjustments.
+
+### 6. Four Screen UI Architecture
+- **Screen 1**: Workout & Profile Configurator (Duration slider, Intensity buttons, Temperature input with climate tags, Cramping history toggle, Tier selector).
+- **Screen 2**: Calculated Fueling Strategy & Direct Store Links (3 large hourly target cards, 3-Phase timeline breakdown, product cards with **"Buy from Official Site"**).
+- **Screen 3**: Post-Workout Adaptive Survey Modal (4 selectable outcomes, instant visual feedback, state updates).
+- **Screen 4**: B2B Brand Data Analytics Portal (Manufacturer View: live outbound lead stream, JSON telemetry inspector, brand referral share breakdown).
+- **Android Mobile Frame Preview Mode**: Toggle between full responsive canvas and an Android native mobile device frame with status bar simulation.
+
+---
+
+## 🏃‍♂️ Quick Start
+
+```powershell
 cd C:\Users\ojasd\.gemini\antigravity\scratch\stridd-clone
-
-# Start the development server
 npm run dev
-
-# Or preview the production build
-npm run preview
 ```
 
 Open `http://localhost:3000` in your browser.

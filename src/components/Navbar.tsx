@@ -4,9 +4,16 @@ import { Sun, Moon, Menu, X, ChevronDown } from 'lucide-react';
 interface NavbarProps {
   onOpenGenerator: (mode?: 'standard' | 'couch') => void;
   onOpenCalculators: () => void;
+  onOpenPyrofit?: () => void;
+  isPyrofitActive?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenGenerator, onOpenCalculators }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onOpenGenerator,
+  onOpenCalculators,
+  onOpenPyrofit,
+  isPyrofitActive = false,
+}) => {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
@@ -36,9 +43,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenGenerator, onOpenCalculato
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-8">
+        {onOpenPyrofit && (
+          <button
+            onClick={onOpenPyrofit}
+            className={`text-xs font-space tracking-[0.3em] font-bold px-3 py-1.5 border transition-all flex items-center gap-1.5 ${
+              isPyrofitActive
+                ? 'bg-strava text-on-brand border-strava shadow-md'
+                : 'text-strava border-strava/40 hover:bg-strava/10'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-strava animate-pulse"></span>
+            PYROFIT FUELING
+          </button>
+        )}
+
         <button
           onClick={() => onOpenGenerator('standard')}
-          className="text-xs font-space tracking-[0.3em] font-bold text-strava/90 hover:text-strava transition-colors"
+          className="text-xs font-space tracking-[0.3em] font-bold text-muted hover:text-fg transition-colors"
         >
           BUILD MY PLAN
         </button>
@@ -185,12 +206,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenGenerator, onOpenCalculato
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed top-16 left-0 w-full bg-carbon border-b border-border p-6 flex flex-col gap-4 shadow-2xl z-50">
+          {onOpenPyrofit && (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenPyrofit();
+              }}
+              className="bg-strava text-on-brand italic-heavy py-3 px-6 text-center text-sm font-bold flex items-center justify-center gap-2 shadow-md"
+            >
+              <span>🔥 PYROFIT FUELING ENGINE</span>
+            </button>
+          )}
           <button
             onClick={() => {
               setMobileMenuOpen(false);
               onOpenGenerator('standard');
             }}
-            className="bg-strava text-on-brand italic-heavy py-3 px-6 text-center text-sm font-bold"
+            className="border border-strava/40 text-strava italic-heavy py-3 px-6 text-center text-sm font-bold"
           >
             BUILD MY PLAN
           </button>
