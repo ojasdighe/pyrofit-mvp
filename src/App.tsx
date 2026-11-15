@@ -241,6 +241,23 @@ export const App: React.FC = () => {
         isOpen={exercisesOpen}
         onClose={() => setExercisesOpen(false)}
       />
+
+      <SamplePlansModal
+        isOpen={samplePlansOpen}
+        onClose={() => setSamplePlansOpen(false)}
+        onOpenGenerator={handleOpenGenerator}
+      />
+
+      <EventCatalogueModal
+        isOpen={eventCatalogueOpen}
+        onClose={() => setEventCatalogueOpen(false)}
+      />
+
+      <ComparePlansModal
+        isOpen={comparePlansOpen}
+        onClose={() => setComparePlansOpen(false)}
+        initialTab={compareInitialTab}
+      />
     </div>
   );
 };

@@ -71,6 +71,10 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
   });
 
   // ── Has calculated at least once ─────────────────────────────────────────
+  // Decision: this flag is intentionally never reset on profile save/update.
+  // Its purpose is to ensure the user has run the workflow end-to-end at least
+  // once before advanced features unlock. Because there is no profile-deletion
+  // UI, the flag is only ever meaningful in the forward direction (first use).
   const [hasCalculated, setHasCalculated] = useState<boolean>(() => {
     try {
       return JSON.parse(localStorage.getItem('pyrofit_has_calculated') ?? 'false');

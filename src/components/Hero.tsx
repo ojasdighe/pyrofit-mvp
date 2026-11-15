@@ -3,7 +3,7 @@
 interface HeroProps {
   onOpenGenerator: (mode?: 'standard' | 'couch') => void;
   onOpenCalculators: () => void;
-  onOpenPyrofit?: () => void;
+  onOpenPyrofit: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, onOpenPyrofit }) => {
@@ -44,20 +44,15 @@ export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, 
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            {onOpenPyrofit ? (
-              <button
-                onClick={onOpenPyrofit}
-                className="bg-strava italic-heavy text-on-brand py-4 px-10 text-lg font-black shadow-[0_16px_48px_rgba(255,107,26,0.35)] hover:shadow-[0_20px_60px_rgba(255,107,26,0.5)] transition-all"
-              >
-                OPEN PYROFIT
-              </button>
-            ) : null}
+            <button
+              onClick={onOpenPyrofit}
+              className="bg-strava italic-heavy text-on-brand py-4 px-10 text-lg font-black shadow-[0_16px_48px_rgba(255,107,26,0.35)] hover:shadow-[0_20px_60px_rgba(255,107,26,0.5)] transition-all"
+            >
+              OPEN PYROFIT
+            </button>
             <button
               onClick={() => onOpenGenerator('standard')}
-              className={onOpenPyrofit
-                ? 'border-2 border-strava/60 py-4 px-8 text-strava hover:bg-strava hover:text-on-brand transition-all italic-heavy text-lg'
-                : 'bg-strava italic-heavy text-on-brand py-4 px-10 text-lg font-black shadow-[0_16px_48px_rgba(255,107,26,0.35)] hover:shadow-[0_20px_60px_rgba(255,107,26,0.5)] transition-all'
-              }
+              className="border-2 border-strava/60 py-4 px-8 text-strava hover:bg-strava hover:text-on-brand transition-all italic-heavy text-lg"
             >
               BUILD MY PLAN
             </button>
