@@ -594,7 +594,7 @@ export const AthleteProfileView: React.FC<AthleteProfileViewProps> = ({
           <div className="grid grid-cols-3 gap-2">
             {(['None', 'Mild', 'Severe / Bloating'] as GISensitivity[]).map((g) => (
               <OptionButton key={g} active={gi_sensitivity === g} onClick={() => setGiSensitivity(g)}>
-                {g}
+                {g === 'Severe / Bloating' ? 'Sensitive Gut' : g}
               </OptionButton>
             ))}
           </div>

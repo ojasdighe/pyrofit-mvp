@@ -194,7 +194,7 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
                 {targets.sodium_hourly_mg} <span className="text-sm text-faint">mg/hr</span>
               </div>
               <div className="text-[11px] font-space text-muted mt-2">
-                Base 400mg × heat factor ({targets.environmental_factor_E}){' '}
+                Base 400mg × Heat Factor: {targets.environmental_factor_E}×{' '}
                 {input.cramping_history ? '+ 200mg cramping buffer' : ''}
               </div>
             </div>
@@ -341,7 +341,10 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
                   {phasePlan.duringWorkout.interval_reminder}
                 </div>
               </div>
-              <span className="text-[11px] font-space text-strava border border-strava/30 bg-strava/5 px-2.5 py-1">
+              <span
+                className="text-[11px] font-space text-strava border border-strava/30 bg-strava/5 px-2.5 py-1 cursor-help"
+                title="Products within 15% of your carb target — no need to match exactly."
+              >
                 ±15% Tolerance Window Compliant
               </span>
             </div>

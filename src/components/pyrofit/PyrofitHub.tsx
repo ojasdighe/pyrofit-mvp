@@ -410,7 +410,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = ({ onBackToMain, initialVie
           }`}
         >
           <User className="w-3.5 h-3.5 shrink-0" />
-          <span>Athlete Profile</span>
+          <span className="truncate">Athlete Profile</span>
           {completeness > 0 && (
             <span
               className={`ml-1 px-1.5 py-0.5 text-[9px] border font-bold rounded-sm ${pillColor}`}
@@ -431,7 +431,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = ({ onBackToMain, initialVie
           }`}
         >
           <Sliders className="w-3.5 h-3.5 shrink-0" />
-          <span>Session Planner</span>
+          <span className="truncate">Session Planner</span>
         </button>
 
         {/* Compare tab */}
@@ -444,7 +444,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = ({ onBackToMain, initialVie
           }`}
         >
           <BarChart2 className="w-3.5 h-3.5 shrink-0" />
-          <span>Product Compare</span>
+          <span className="truncate">Product Compare</span>
         </button>
 
         {/* Rate My Session tab */}
@@ -457,7 +457,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = ({ onBackToMain, initialVie
           }`}
         >
           <RotateCcw className="w-3.5 h-3.5 shrink-0" />
-          <span>Rate My Session</span>
+          <span className="truncate">Rate My Session</span>
         </button>
 
         {/* Analytics tab */}
@@ -470,7 +470,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = ({ onBackToMain, initialVie
           }`}
         >
           <BarChart3 className="w-3.5 h-3.5 shrink-0" />
-          <span>History &amp; Data</span>
+          <span className="truncate">History &amp; Data</span>
         </button>
       </div>
       )}
