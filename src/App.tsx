@@ -137,6 +137,7 @@ export const App: React.FC = () => {
     setActiveTab(tab);
     if (initialHub) setHubInitialView(initialHub);
     window.location.hash = tab;
+    window.scrollTo({ top: 0, behavior: 'instant' });
     closeAllModals();
   };
 
