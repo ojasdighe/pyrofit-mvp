@@ -49,6 +49,7 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
 }) => {
   const [clickedProductIds, setClickedProductIds] = useState<string[]>([]);
   const [lastTelemetryNotice, setLastTelemetryNotice] = useState<string | null>(null);
+  const [telemetryError, setTelemetryError] = useState<string | null>(null);
 
   const handleProductClick = (product: FuelProduct) => {
     try {
@@ -60,11 +61,12 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
       );
       setClickedProductIds((prev) => [...prev, product.id]);
       setLastTelemetryNotice(
-        `Outbound lead recorded: Click ID ${payload.click_id.slice(0, 16)}... → Redirected to ${product.brand} official store.`
+        `Store visit recorded (${payload.click_id.slice(0, 16)}…) → Opening ${product.brand} official store.`
       );
       onTelemetryRecorded();
     } catch (err: any) {
-      alert(err.message);
+      setTelemetryError(err?.message ?? 'Telemetry recording failed. Please try again.');
+      setTimeout(() => setTelemetryError(null), 4000);
     }
   };
 
@@ -91,8 +93,16 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
             <span>{lastTelemetryNotice}</span>
           </div>
           <span className="text-[10px] text-faint uppercase tracking-wider">
-            Zero in-app purchase · Direct Brand Store
+            Takes you to the brand's official store — no in-app purchase
           </span>
+        </div>
+      )}
+
+      {/* Telemetry Error Banner */}
+      {telemetryError && (
+        <div className="p-3 bg-red-500/10 border border-red-500/30 text-xs font-space text-red-400 flex items-center gap-2">
+          <span className="font-bold">⚠</span>
+          <span>{telemetryError}</span>
         </div>
       )}
 
@@ -101,10 +111,10 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border">
           <div>
             <div className="text-strava font-space text-[10px] tracking-[0.5em] uppercase mb-1 font-bold">
-              SCIENTIFIC MACRONUTRIENT TARGETS
+              YOUR FUELING TARGETS
             </div>
             <h2 className="italic-heavy text-3xl md:text-4xl text-fg">
-              HOURLY FUELING <span className="text-strava">RATE SPECIFICATION</span>
+              HOURLY FUELING <span className="text-strava">PLAN</span>
             </h2>
             <div className="flex items-center gap-2 mt-2 flex-wrap">
               <span className="text-[11px] font-space px-2.5 py-1 bg-surface border border-border text-muted">
@@ -114,7 +124,7 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
                 Intensity: <strong className="text-strava">{input.intensity_level} ({targets.intensity_modifier}x)</strong>
               </span>
               <span className="text-[11px] font-space px-2.5 py-1 bg-surface border border-border text-muted">
-                Climate: <strong className="text-fg">{input.temperature_celsius}°C (E = {targets.environmental_factor_E})</strong>
+                Climate: <strong className="text-fg">{input.temperature_celsius}°C (Heat Factor: {targets.environmental_factor_E}×)</strong>
               </span>
               {profile.carb_multiplier !== 1 && (
                 <span className="text-[11px] font-space px-2.5 py-1 bg-strava/15 border border-strava/40 text-strava font-bold">
@@ -184,7 +194,7 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
                 {targets.sodium_hourly_mg} <span className="text-sm text-faint">mg/hr</span>
               </div>
               <div className="text-[11px] font-space text-muted mt-2">
-                Base 400mg × E ({targets.environmental_factor_E}){' '}
+                Base 400mg × heat factor ({targets.environmental_factor_E}){' '}
                 {input.cramping_history ? '+ 200mg cramping buffer' : ''}
               </div>
             </div>
@@ -207,7 +217,7 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
                 {targets.fluids_hourly_ml} <span className="text-sm text-faint">ml/hr</span>
               </div>
               <div className="text-[11px] font-space text-muted mt-2">
-                Thermoregulatory dissipation rate at {input.temperature_celsius}°C ambient heat.
+                How much fluid you lose to sweat per hour at {input.temperature_celsius}°C.
               </div>
             </div>
             <div className="mt-4 pt-3 border-t border-border/50 text-[10px] font-space text-faint flex justify-between">
@@ -223,10 +233,10 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <div className="text-strava font-space text-[9px] tracking-[0.5em] uppercase font-bold">
-              CHRONOLOGICAL EXECUTION
+              STEP-BY-STEP PLAN
             </div>
             <h3 className="italic-heavy text-2xl md:text-3xl text-fg">
-              3-PHASE TIMELINE <span className="text-strava">ALLOCATION</span>
+              3-PHASE <span className="text-strava">FUELING TIMELINE</span>
             </h3>
           </div>
           <span className="text-xs font-space text-faint">
@@ -241,10 +251,13 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
               <span className="font-space text-xs font-bold bg-surface border border-border text-strava px-2.5 py-1 uppercase">
                 PHASE 01
               </span>
-              <div className="italic-heavy text-xl text-fg">PRE-WORKOUT // PRIMING</div>
+              <div className="italic-heavy text-xl text-fg">PRE-WORKOUT</div>
             </div>
-            <div className="text-xs font-space text-muted flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-strava" /> {phasePlan.preWorkout.timing}
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="italic-heavy text-sm text-strava bg-strava/10 border border-strava/30 px-3 py-1 flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" /> 45–60 MIN BEFORE
+              </div>
+              <span className="text-xs font-space text-muted">{phasePlan.preWorkout.timing}</span>
             </div>
           </div>
 
@@ -311,10 +324,10 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
               <span className="font-space text-xs font-bold bg-strava text-on-brand px-2.5 py-1 uppercase">
                 PHASE 02
               </span>
-              <div className="italic-heavy text-xl text-fg">DURING-WORKOUT // SUSTAINED INTAKE</div>
+              <div className="italic-heavy text-xl text-fg">DURING WORKOUT</div>
             </div>
-            <div className="text-xs font-space text-strava flex items-center gap-1.5 font-bold">
-              <Clock className="w-3.5 h-3.5 text-strava" /> {phasePlan.duringWorkout.timing}
+            <div className="italic-heavy text-sm text-strava bg-strava/10 border border-strava/30 px-3 py-1 flex items-center gap-1.5 font-bold">
+              <Clock className="w-3.5 h-3.5 text-strava" /> THROUGHOUT THE SESSION
             </div>
           </div>
 
@@ -379,10 +392,10 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
               <span className="font-space text-xs font-bold bg-surface border border-border text-emerald-400 px-2.5 py-1 uppercase">
                 PHASE 03
               </span>
-              <div className="italic-heavy text-xl text-fg">POST-WORKOUT // GLYCOGEN &amp; REPAIR</div>
+              <div className="italic-heavy text-xl text-fg">POST-WORKOUT RECOVERY</div>
             </div>
-            <div className="text-xs font-space text-muted flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-emerald-400" /> {phasePlan.postWorkout.timing}
+            <div className="italic-heavy text-sm text-emerald-400 bg-emerald-400/10 border border-emerald-400/30 px-3 py-1 flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-emerald-400" /> WITHIN 30 MIN AFTER
             </div>
           </div>
 
@@ -519,7 +532,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </button>
 
         <div className="text-[8px] font-space text-faint text-center mt-1.5 truncate">
-          {new URL(product.official_url).hostname} · Zero in-app checkout
+          {new URL(product.official_url).hostname} · Opens brand's official store
         </div>
       </div>
     </div>

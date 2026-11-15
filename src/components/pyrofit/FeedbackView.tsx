@@ -23,6 +23,7 @@ interface FeedbackViewProps {
   targets: CalculatedHourlyTargets;
   currentProfile: AthleteProfileState;
   onProfileUpdated: (updated: AthleteProfileState, notes: string[]) => void;
+  hasCalculated?: boolean;
 }
 
 const HISTORY_KEY = 'pyrofit_feedback_history_v1';
@@ -97,6 +98,7 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
   targets,
   currentProfile,
   onProfileUpdated,
+  hasCalculated = false,
 }) => {
   const [selectedOutcome, setSelectedOutcome] = useState<FeedbackOutcome | null>(null);
   const [appliedNotes, setAppliedNotes] = useState<string[]>([]);
@@ -209,10 +211,22 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* ── Current Adaptive State Panel ── */}
+      {/* ── Entry guard: no session logged yet ── */}
+      {!hasCalculated && (
+        <div className="p-8 bg-surface border border-border text-center space-y-3">
+          <RotateCcw className="w-8 h-8 text-muted mx-auto" />
+          <h3 className="italic-heavy text-xl text-fg">Log a Session First</h3>
+          <p className="text-muted text-sm font-light max-w-sm mx-auto">
+            Complete your first workout and calculate your fueling plan — then come back here to tell us how you felt. The engine will adjust your targets based on your body's response.
+          </p>
+        </div>
+      )}
+
+      {/* ── Main content — only shown after first calculation ── */}
+      {hasCalculated && (<>
       <div className="bg-carbon border border-border p-5">
         <div className="text-strava font-space text-[9px] tracking-[0.5em] uppercase mb-3 font-bold">
-          ADAPTIVE STATE // CURRENT PROFILE MULTIPLIERS
+          HOW YOUR PROFILE IS CALIBRATED
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
@@ -236,10 +250,10 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
             </div>
           </div>
 
-          {/* Hydrogel Lock */}
+          {/* Gut-Safe Filter */}
           <div className="bg-surface border border-sky-400/20 p-3 text-center">
             <div className="text-[9px] font-space text-faint uppercase tracking-widest mb-1">
-              Hydrogel Lock
+              Gut-Safe Filter
             </div>
             <div
               className={`text-xl font-space font-bold ${
@@ -272,7 +286,7 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
       {/* ── 4 Outcome Cards ── */}
       <div>
         <div className="text-strava font-space text-[9px] tracking-[0.5em] uppercase mb-3 font-bold">
-          POST-WORKOUT QUALITATIVE SURVEY
+          HOW DID YOUR SESSION FEEL?
         </div>
         <p className="text-muted text-xs font-light mb-4">
           Log your physiological sensations. The engine automatically recalibrates sodium,
@@ -315,7 +329,7 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
             <div className="flex items-center justify-between mb-2">
               <ShieldAlert className="w-5 h-5 text-sky-400" />
               <span className="text-[9px] font-space text-sky-400 font-bold uppercase">
-                Hydrogel Lock
+                Gut-Safe Filter
               </span>
             </div>
             <div className="italic-heavy text-lg text-fg">Stomach Sloshing / Bloat</div>
@@ -421,7 +435,7 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
       {/* ── Feedback History Panel ── */}
       <div className="bg-carbon border border-border p-5">
         <div className="text-strava font-space text-[9px] tracking-[0.5em] uppercase mb-4 font-bold">
-          FEEDBACK HISTORY // LAST 5 SESSIONS
+          YOUR SESSION FEEDBACK HISTORY
         </div>
 
         {last5.length === 0 ? (
@@ -471,6 +485,7 @@ export const FeedbackView: React.FC<FeedbackViewProps> = ({
           </div>
         )}
       </div>
+      </>)}
     </div>
   );
 };

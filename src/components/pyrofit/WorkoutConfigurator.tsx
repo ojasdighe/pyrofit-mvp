@@ -77,13 +77,13 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
         <div>
           <div className="flex items-center gap-2 text-strava font-space text-[10px] tracking-[0.4em] uppercase font-bold">
             <Flame className="w-4 h-4 text-strava animate-pulse" />
-            PYROFIT // PROTOCOL ENGINE v1.0
+            PYROFIT // SESSION PLANNER
           </div>
           <h2 className="italic-heavy text-3xl md:text-4xl text-fg mt-1">
-            WORKOUT &amp; <span className="text-strava">ATHLETE CONFIGURATOR</span>
+            PLAN YOUR <span className="text-strava">SESSION</span>
           </h2>
           <p className="text-muted text-xs font-light">
-            Calibrate deterministic carbohydrate, electrolyte, and hydration targets before your session.
+            Tell us about your upcoming workout to get your personalised fueling plan.
           </p>
         </div>
 
@@ -92,6 +92,35 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
             <ShieldAlert className="w-3.5 h-3.5" /> Gut-Safe Filter On — only easy-to-digest products shown
           </div>
         )}
+      </div>
+
+      {/* Mode Switcher: Express vs Elite Tuning */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2 bg-surface border border-border">
+        <span className="text-xs font-space text-muted pl-2">
+          Configuration Depth:
+        </span>
+        <div className="flex gap-1.5">
+          <button
+            type="button"
+            onClick={() => setAdvancedOpen(false)}
+            className={`px-4 py-2 text-xs font-space uppercase font-bold tracking-wider transition-all flex items-center gap-1.5 ${!advancedOpen
+                ? 'bg-strava text-on-brand shadow-sm'
+                : 'border border-border text-muted hover:text-fg'
+              }`}
+          >
+            ⚡ Express Mode (3 Core Inputs)
+          </button>
+          <button
+            type="button"
+            onClick={() => setAdvancedOpen(true)}
+            className={`px-4 py-2 text-xs font-space uppercase font-bold tracking-wider transition-all flex items-center gap-1.5 ${advancedOpen
+                ? 'bg-strava text-on-brand shadow-sm'
+                : 'border border-border text-muted hover:text-fg'
+              }`}
+          >
+            ⚙️ Elite Tuning (All 8 Levers)
+          </button>
+        </div>
       </div>
 
       <div className="space-y-6">
@@ -143,11 +172,10 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
                   key={item.id}
                   type="button"
                   onClick={() => setField('intensity_level', item.id as IntensityLevel)}
-                  className={`p-3.5 text-left border transition-all ${
-                    active
+                  className={`p-3.5 text-left border transition-all ${active
                       ? 'border-strava bg-strava/10 ring-1 ring-strava'
                       : 'border-border bg-surface text-muted hover:border-border-bright hover:text-fg'
-                  }`}
+                    }`}
                 >
                   <div className={`italic-heavy text-base ${active ? 'text-strava' : 'text-fg'}`}>
                     {item.label}
@@ -243,12 +271,12 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
               </div>
               {weatherResult && (
                 <div className="px-3 py-2 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 text-xs font-space font-bold flex flex-wrap items-center gap-2">
-                  🌤 {weatherResult.city_name} · {weatherResult.temperature_c}°C · {weatherResult.humidity_pct}% RH · Wet-bulb {weatherResult.wet_bulb_c}°C
+                  🌤 {weatherResult.city_name} · {weatherResult.temperature_c}°C · {weatherResult.humidity_pct}% Humidity · Feels-like heat stress: {weatherResult.wet_bulb_c}°C
                 </div>
               )}
               {weatherResult && wetBulbC !== null && wetBulbC > 28 && (
                 <div className="px-3 py-2 bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs font-space">
-                  ⚠ High wet-bulb temperature ({wetBulbC}°C) — evaporative cooling is impaired. Sodium targets are automatically elevated.
+                  ⚠ Feels very hot (heat stress {wetBulbC}°C) — your body cannot cool itself through sweat efficiently at this level. Increase fluid and sodium intake.
                 </div>
               )}
               {weatherError && (
@@ -291,11 +319,10 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
                 <button
                   type="button"
                   onClick={() => setField('cramping_history', !input.cramping_history)}
-                  className={`px-4 py-2 text-xs font-space font-bold uppercase transition-all border ${
-                    input.cramping_history
+                  className={`px-4 py-2 text-xs font-space font-bold uppercase transition-all border ${input.cramping_history
                       ? 'border-strava bg-strava text-on-brand'
                       : 'border-border bg-carbon text-muted hover:text-fg'
-                  }`}
+                    }`}
                 >
                   {input.cramping_history ? 'YES (CRAMP PRONE)' : 'NO (STANDARD)'}
                 </button>
@@ -320,11 +347,10 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
                       key={t.id}
                       type="button"
                       onClick={() => setField('budget_tier_preference', t.id as ProductTier)}
-                      className={`p-3 text-left border text-xs font-space transition-all ${
-                        active
+                      className={`p-3 text-left border text-xs font-space transition-all ${active
                           ? 'border-strava bg-strava/15 text-fg font-bold'
                           : 'border-border bg-surface text-muted hover:text-fg'
-                      }`}
+                        }`}
                     >
                       <div className="font-bold">{t.label}</div>
                       <div className="text-[9px] text-faint mt-1 line-clamp-1">{t.desc}</div>
@@ -347,11 +373,10 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
                       key={t}
                       type="button"
                       onClick={() => setField('session_type', t)}
-                      className={`p-3 text-left border text-xs font-space transition-all ${
-                        active
+                      className={`p-3 text-left border text-xs font-space transition-all ${active
                           ? 'border-strava bg-strava/15 text-fg font-bold'
                           : 'border-border bg-surface text-muted hover:text-fg'
-                      }`}
+                        }`}
                     >
                       {t}
                     </button>
@@ -373,11 +398,10 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
                       key={t}
                       type="button"
                       onClick={() => setField('terrain', t)}
-                      className={`p-3 text-left border text-xs font-space transition-all ${
-                        active
+                      className={`p-3 text-left border text-xs font-space transition-all ${active
                           ? 'border-strava bg-strava/15 text-fg font-bold'
                           : 'border-border bg-surface text-muted hover:text-fg'
-                      }`}
+                        }`}
                     >
                       {t}
                     </button>
@@ -399,11 +423,10 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
                       key={f}
                       type="button"
                       onClick={() => setField('fluid_access', f)}
-                      className={`p-3 text-left border text-xs font-space transition-all ${
-                        active
+                      className={`p-3 text-left border text-xs font-space transition-all ${active
                           ? 'border-strava bg-strava/15 text-fg font-bold'
                           : 'border-border bg-surface text-muted hover:text-fg'
-                      }`}
+                        }`}
                     >
                       {f}
                     </button>
@@ -457,12 +480,12 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
       </div>
       <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-[10px] font-space text-faint uppercase tracking-widest">
-          Deterministic Mathematical Engine · Zero AI Guesswork · Sports Science Consensus
+          Science-based formula · Personalised to your body and conditions
         </div>
 
         <button
           onClick={onCalculate}
-          className="w-full sm:w-auto bg-strava italic-heavy text-on-brand py-4 px-12 text-lg font-black shadow-[0_12px_40px_rgba(204,255,0,0.3)] hover:shadow-[0_16px_50px_rgba(204,255,0,0.45)] hover:bg-white transition-all flex items-center justify-center gap-2"
+          className="w-full sm:w-auto bg-strava italic-heavy text-on-brand py-4 px-12 text-lg font-black shadow-[0_12px_40px_rgba(255,107,26,0.3)] hover:shadow-[0_16px_50px_rgba(255,107,26,0.45)] hover:bg-white transition-all flex items-center justify-center gap-2"
         >
           CALCULATE FUELING PROTOCOL <ArrowRight className="w-5 h-5" />
         </button>

@@ -91,13 +91,13 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
         <div>
           <div className="flex items-center gap-2 text-strava font-space text-[10px] tracking-[0.4em] uppercase font-bold">
             <Building2 className="w-4 h-4 text-strava" />
-            PYROFIT B2B // TELEMETRY &amp; OUTBOUND REFERRAL ENGINE
+            PYROFIT // SESSION &amp; PRODUCT HISTORY
           </div>
           <h2 className="italic-heavy text-3xl md:text-4xl text-fg mt-1">
-            MANUFACTURER <span className="text-strava">LEAD INTELLIGENCE</span>
+            YOUR <span className="text-strava">ACTIVITY LOG</span>
           </h2>
           <p className="text-muted text-xs font-light">
-            Real-time telemetry event stream of high-intent endurance athlete referrals routed directly to official brand stores.
+            Your session history, product store visits, and data exports — all stored locally in your browser.
           </p>
         </div>
 
@@ -123,40 +123,40 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-5 bg-surface border border-border">
-          <div className="text-[10px] font-space text-faint uppercase">Total Outbound Referrals</div>
+          <div className="text-[10px] font-space text-faint uppercase">Product Store Visits</div>
           <div className="text-3xl font-space font-black text-strava mt-1">{totalClicks}</div>
-          <div className="text-[10px] font-space text-muted mt-1">100% Direct to Official Brand URLs</div>
+          <div className="text-[10px] font-space text-muted mt-1">100% Direct to Official Brand Stores</div>
         </div>
 
         <div className="p-5 bg-surface border border-border">
-          <div className="text-[10px] font-space text-faint uppercase">Top Brand Referral Share</div>
+          <div className="text-[10px] font-space text-faint uppercase">Most Visited Brand</div>
           <div className="text-2xl font-space font-black text-fg mt-1">
             {sortedBrands[0] ? `${sortedBrands[0][0]} (${sortedBrands[0][1]})` : '—'}
           </div>
           <div className="text-[10px] font-space text-muted mt-1">
-            {sortedBrands[0] && totalClicks ? `${Math.round((sortedBrands[0][1] / totalClicks) * 100)}% market capture` : 'No data'}
+            {sortedBrands[0] && totalClicks ? `${Math.round((sortedBrands[0][1] / totalClicks) * 100)}% of your visits` : 'No data'}
           </div>
         </div>
 
         <div className="p-5 bg-surface border border-border">
-          <div className="text-[10px] font-space text-faint uppercase">Scientific Tier (L1) Share</div>
+          <div className="text-[10px] font-space text-faint uppercase">Premium Products Visited</div>
           <div className="text-3xl font-space font-black text-amber-400 mt-1">
             {tierCounts['L1'] || 0}
           </div>
-          <div className="text-[10px] font-space text-muted mt-1">Premium Hydrogel / Pro Formula Clicks</div>
+          <div className="text-[10px] font-space text-muted mt-1">L1 Tier (Maurten, Unived Elite) Visits</div>
         </div>
 
         <div className="p-5 bg-surface border border-border">
-          <div className="text-[10px] font-space text-faint uppercase">Zero Marketplace Leaks</div>
+          <div className="text-[10px] font-space text-faint uppercase">Direct Brand Stores Only</div>
           <div className="text-3xl font-space font-black text-emerald-400 mt-1">100%</div>
-          <div className="text-[10px] font-space text-muted mt-1">Direct official webstore navigation only</div>
+          <div className="text-[10px] font-space text-muted mt-1">No Amazon or marketplace redirects</div>
         </div>
       </div>
 
       {/* Brand Share Breakdown */}
       <div className="p-4 bg-surface border border-border">
         <div className="text-xs font-space font-bold text-fg uppercase tracking-wider mb-3">
-          Manufacturer Lead Distribution
+          Products Visited by Brand
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {['Maurten', 'Unived', 'Fast&Up', 'Enerzal'].map((brand) => {
@@ -179,10 +179,10 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="text-xs font-space font-bold text-strava uppercase tracking-wider">
-            Live Outbound Click Telemetry Stream ({events.length} Events)
+            Product Store Visits ({events.length} visits recorded)
           </div>
           <span className="text-[10px] font-space text-faint">
-            Strict Schema Adherence: Section 5
+            All visits go to official brand stores only
           </span>
         </div>
 
@@ -190,19 +190,18 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
           <table className="w-full text-left text-xs font-space border-collapse">
             <thead>
               <tr className="bg-surface text-faint uppercase text-[10px] border-b border-border">
-                <th className="p-3">Timestamp (UTC)</th>
+                <th className="p-3">Date / Time</th>
                 <th className="p-3">Brand &amp; Product</th>
                 <th className="p-3">Tier</th>
                 <th className="p-3">Workout Context</th>
-                <th className="p-3">Calculated Targets</th>
-                <th className="p-3 text-right">Payload</th>
+                <th className="p-3">Targets at Visit</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {events.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-muted font-light">
-                    No outbound clicks logged yet. Click "Buy from Official Site" in Screen 2 to generate telemetry events.
+                  <td colSpan={5} className="p-6 text-center text-muted font-light">
+                    No product store visits yet. Click "Buy from Official Site" on any product to record a visit.
                   </td>
                 </tr>
               ) : (
@@ -227,14 +226,6 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
                       <span className="text-strava font-bold">{ev.calculated_targets.carbs_hourly_g}g/h</span> ·{' '}
                       <span className="text-amber-400">{ev.calculated_targets.sodium_hourly_mg}mg/h</span> ·{' '}
                       <span className="text-sky-400">{ev.calculated_targets.fluids_hourly_ml}ml/h</span>
-                    </td>
-                    <td className="p-3 text-right">
-                      <button
-                        onClick={() => setInspectedEvent(ev)}
-                        className="inline-flex items-center gap-1 text-[10px] font-space text-strava hover:underline px-2 py-1 bg-surface border border-border"
-                      >
-                        <Eye className="w-3 h-3" /> Inspect JSON
-                      </button>
                     </td>
                   </tr>
                 ))
@@ -280,7 +271,7 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
                 title={confirmClear ? 'Click again to confirm clear' : 'Clear local logs'}
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                {confirmClear ? 'Confirm?' : ''}
+                {confirmClear ? 'Confirm Clear?' : 'Clear All Data'}
               </button>
               {confirmClear && (
                 <button
@@ -292,6 +283,27 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
                 </button>
               )}
             </div>
+            {/* Developer: Inspect raw event payloads */}
+            {events.length > 0 && (
+              <div>
+                <div className="text-[10px] font-space text-faint uppercase tracking-wider mb-2">Raw Event Payloads (Developer)</div>
+                <div className="space-y-1 max-h-48 overflow-y-auto">
+                  {events.map((ev) => (
+                    <button
+                      key={ev.click_id}
+                      onClick={() => setInspectedEvent(ev)}
+                      className="w-full text-left px-3 py-1.5 bg-surface border border-border text-[11px] font-space text-muted hover:text-fg hover:border-strava transition-all flex items-center gap-2"
+                    >
+                      <Eye className="w-3 h-3 text-strava flex-shrink-0" />
+                      <span>{ev.product_metadata.brand_name} — {ev.product_metadata.product_name}</span>
+                      <span className="ml-auto text-faint text-[10px]">
+                        {new Date(ev.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

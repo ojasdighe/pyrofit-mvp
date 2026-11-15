@@ -58,9 +58,10 @@ const profileToAthleteState = (fp: FullAthleteProfile): AthleteProfileState => (
 
 interface PyrofitHubProps {
   onBackToMain?: () => void;
+  initialView?: HubView;
 }
 
-export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
+export const PyrofitHub: React.FC<PyrofitHubProps> = ({ onBackToMain, initialView }) => {
   // ── Full profile from localStorage ───────────────────────────────────────
   const [fullProfile, setFullProfile] = useState<FullAthleteProfile | null>(() => {
     try {
@@ -85,8 +86,14 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
 
   // ── Active view: default to 'profile' when no profile exists ─────────────
   const [activeView, setActiveView] = useState<HubView>(() =>
-    fullProfile ? 'planner' : 'profile'
+    initialView || (fullProfile ? 'planner' : 'profile')
   );
+
+  useEffect(() => {
+    if (initialView) {
+      setActiveView(initialView);
+    }
+  }, [initialView]);
 
   // ── Planner sub-screen ────────────────────────────────────────────────────
   const [plannerScreen, setPlannerScreen] = useState<PlannerScreen>('config');
@@ -264,13 +271,13 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         <div>
           <div className="flex items-center gap-2 text-strava font-space text-[10px] tracking-[0.5em] uppercase font-bold">
             <Flame className="w-4 h-4 text-strava" />
-            PYROFIT MVP // ATHLETE FUELING &amp; OUTBOUND TELEMETRY PLATFORM
+            PYROFIT MVP // PRECISION FUELING CALCULATOR
           </div>
           <h1 className="italic-heavy text-3xl sm:text-4xl text-fg mt-1">
             PRECISION ENDURANCE <span className="text-strava">FUELING ENGINE</span>
           </h1>
           <p className="text-muted text-xs font-light mt-1 max-w-2xl">
-            Real-time carbohydrate, sodium &amp; fluid calculations derived from sports science consensus, paired with strict outbound official manufacturer telemetry and ML post-workout feedback.
+            Calculates exact carbohydrate, sodium &amp; fluid targets for your session — personalised to your body, effort, and conditions. Products link direct to official brand stores.
           </p>
         </div>
       </div>
@@ -296,7 +303,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
       )}
 
       {/* First-open welcome card OR normal flow */}
-      {!fullProfile ? (
+      {!fullProfile && activeView !== 'profile' ? (
         <div className="mb-8 p-8 bg-strava/5 border-2 border-strava/40 text-center space-y-5">
           <div className="text-strava font-space text-[10px] tracking-[0.5em] uppercase font-bold flex items-center justify-center gap-2">
             <Flame className="w-4 h-4" /> WELCOME TO PYROFIT
@@ -326,7 +333,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
             START: BUILD YOUR PROFILE →
           </button>
         </div>
-      ) : (
+      ) : fullProfile ? (
         <>
           {/* Feature Launcher Bar */}
           <div className="flex flex-wrap gap-2 mb-6">
@@ -388,7 +395,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
             )}
           </div>
         </>
-      )}
+      ) : null}
 
       {/* 5-Tab Navigation — only shown when profile exists */}
       {fullProfile && (
@@ -440,7 +447,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
           <span>Product Compare</span>
         </button>
 
-        {/* Post-workout tab */}
+        {/* Rate My Session tab */}
         <button
           onClick={() => setActiveView('feedback')}
           className={`py-3 px-2 text-center text-xs font-space font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${
@@ -450,7 +457,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
           }`}
         >
           <RotateCcw className="w-3.5 h-3.5 shrink-0" />
-          <span>Post-Workout</span>
+          <span>Rate My Session</span>
         </button>
 
         {/* Analytics tab */}
@@ -599,6 +606,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
           targets={targets}
           currentProfile={profile}
           onProfileUpdated={handleProfileUpdated}
+          hasCalculated={hasCalculated}
         />
       )}
 
