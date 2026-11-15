@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Gear & Running Lab View
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Evidence-based laboratory desk providing independent head-to-head comparisons for
+ *              carbon race shoes, multi-band GPS watches, and 10 world-class training philosophies.
+ */
+
 import React, { useState } from 'react';
 import { Layers, Watch, GitCompare, Flag, ArrowRight, Zap, ShieldCheck, HeartPulse, Dumbbell } from 'lucide-react';
 

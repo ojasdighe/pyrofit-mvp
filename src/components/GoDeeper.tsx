@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Go Deeper Resource Hub
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 11-card navigation grid mapping directly to dedicated modals: Fuel Schemes, Injury Prevention,
+ *              Exercises, Sample Plans, Race Catalogue, and Head-to-Head Comparisons.
+ */
+
 import React from 'react';
 import {
   Zap,

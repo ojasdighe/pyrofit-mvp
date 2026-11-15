@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Running Lab Callout Section
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Editorial deep-dive desk featuring direct links to Gear & Biomechanics comparisons.
+ */
+
 import React from 'react';
 import { Layers, GitCompare, Award, ArrowRight } from 'lucide-react';
 

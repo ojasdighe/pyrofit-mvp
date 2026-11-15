@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Compare Plans, Shoes & Watches Modal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Multi-tab comparison overlay featuring pinned sticky model columns and horizontal swipe cues.
+ */
+
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 

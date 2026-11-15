@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Plan Generator Modal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Interactive training plan builder modal supporting Standard and Couch-to-5K modes,
+ *              with brand neon-orange celebration confetti and volume progression calculations.
+ */
+
 import React, { useState } from 'react';
 import { X, Check, AlertCircle, Sparkles, ChevronRight, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';

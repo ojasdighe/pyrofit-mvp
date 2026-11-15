@@ -1,4 +1,11 @@
-﻿import React from 'react';
+/**
+ * PYROFIT MVP — Landing Page Hero Section
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Redesigned high-impact full-bleed hero with neon orange aesthetic, dynamic stats ribbon, and primary action CTAs.
+ */
+
+import React from 'react';
 
 interface HeroProps {
   onOpenGenerator: (mode?: 'standard' | 'couch') => void;

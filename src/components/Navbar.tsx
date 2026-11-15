@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Global Navigation Bar
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Primary header with 4-pillar tabs, explore mega-menu, dark/light theme toggle,
+ *              responsive mobile menu, and Blueprint Generator CTA.
+ */
+
 import React, { useState } from 'react';
 import { Sun, Moon, Menu, X, ChevronDown, Flame, Compass, Dumbbell, HeartPulse, Flag } from 'lucide-react';
 

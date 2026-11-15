@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Product Comparison & Catalog View
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 39-product comparison panel with cost-efficiency metrics, nutrition facts, and inline error toasts.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { ShieldCheck, X } from 'lucide-react';
 import { SEED_PRODUCT_CATALOG } from '../../data/productCatalog';

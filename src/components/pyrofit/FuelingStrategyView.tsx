@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Calculated Fueling Strategy Protocol View
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 3-phase fueling protocol timeline with inline telemetry notifications, non-intrusive error toasts, and direct official brand store redirects.
+ */
+
 import React, { useState } from 'react';
 import {
   Flame,

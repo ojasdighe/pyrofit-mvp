@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Race Event Catalogue Modal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 18-race course intelligence table with difficulty ratings, BQ qualifiers, sticky event names, and category filter pills.
+ */
+
 import React, { useState } from 'react';
 import { X, Flag, Calendar, MapPin, Star } from 'lucide-react';
 

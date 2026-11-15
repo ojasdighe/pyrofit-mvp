@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — What You Get Value Proposition
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 3-card core value showcase wired to Event Catalogue, Zone Calculators, and Couch-to-5K.
+ */
+
 import React from 'react';
 import { Flag, Gauge, Footprints, ArrowRight } from 'lucide-react';
 

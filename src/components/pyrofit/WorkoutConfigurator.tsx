@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Workout & Athlete Configurator
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Fueling session configurator featuring Express Mode (3 core inputs) vs. Elite Tuning (8 endurance levers)
+ *              with live Open-Meteo weather fetch, wet-bulb heat index evaluation, and gut-safe isotonic filtering.
+ */
+
 import React, { useState } from 'react';
 import {
   Flame,

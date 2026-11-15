@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Running Injury Prevention & Rehabilitation Modal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Evidence-based runner injury protocols: 6 core conditions, 4 prevention pillars, return-to-run criteria, and red flag warnings.
+ */
+
 import React, { useState } from 'react';
 import { X, AlertTriangle, Shield, Activity, ChevronDown, ChevronUp } from 'lucide-react';
 

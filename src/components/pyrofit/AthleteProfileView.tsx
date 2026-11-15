@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Full Athlete Fueling Profile View
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Profile setup covering physical details, GI sensitivity, dietary exclusions, anti-doping filters,
+ *              race targets, and self-service AI Sports Scientist configuration (OpenAI, Gemini, Anthropic, Mistral).
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   User,

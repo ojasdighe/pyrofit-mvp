@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — B2B Manufacturer Analytics & Telemetry Portal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Analytics dashboard with click telemetry logs, CSV/JSON export, and two-click confirmation clear controls.
+ */
+
 import React, { useState } from 'react';
 import {
   BarChart3,

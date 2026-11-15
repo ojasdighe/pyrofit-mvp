@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Exercise & Strength Library Modal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 20 running-specific exercises with live real-time search, category filters (Strength, Mobility, Drills, Core), and form cues.
+ */
+
 import React, { useState } from 'react';
 import { X, Dumbbell, Search } from 'lucide-react';
 

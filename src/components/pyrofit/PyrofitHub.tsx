@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Precision Endurance Fueling Hub
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Master fueling workspace supporting 5 core views: Athlete Profile, Session Planner, Product Compare,
+ *              Post-Workout Qualitative Survey, and B2B Telemetry Portal, with power tool launchers.
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Flame,

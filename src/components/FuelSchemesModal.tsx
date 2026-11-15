@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Fuel Schemes & Nutrition Modal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 4-phase sports nutrition schemes: pre-race carb loading, intra-race hourly intake, post-race recovery, and India-specific fuels.
+ */
+
 import React, { useState } from 'react';
 import { X, Zap, Droplets, Flame, Coffee, Apple, Info } from 'lucide-react';
 

@@ -1,6 +1,8 @@
 /**
- * Pyrofit AI Sports Nutritionist & Copilot Service
- * Supports: OpenAI, Anthropic, Google Gemini, Mistral, FreeLLMAPI, or any OpenAI-compatible API
+ * PYROFIT MVP — AI Sports Nutritionist & Copilot Service
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: AI sports scientist chat, race-day briefings, and adaptive feedback analysis with deterministic sports science fallback.
  */
 
 import {

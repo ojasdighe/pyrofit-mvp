@@ -1,8 +1,8 @@
 /**
- * Pyrofit SQLite Database Engine
- * A full-featured in-browser SQLite-compatible relational database layer
- * supporting SQL queries (SELECT, INSERT, UPDATE, DELETE, GROUP BY, PRAGMA),
- * table schemas, persistence, and export to .sql dump scripts.
+ * PYROFIT MVP — SQLite Database Engine
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: In-browser relational database layer supporting SQL syntax, schemas, persistence, and .sql dump export.
  */
 
 import { SEED_PRODUCT_CATALOG } from '../data/productCatalog';

@@ -1,3 +1,11 @@
+/**
+ * PYROFIT MVP — Application Root Component
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Unified 4-Pillar navigation architecture (Training Plans, Fuel Engine, Gear & Lab, Athlete Profile)
+ *              with bi-directional URL hash routing, deep linking, and native browser back/forward support.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Navbar, NavTab } from './components/Navbar';
 import { Hero } from './components/Hero';

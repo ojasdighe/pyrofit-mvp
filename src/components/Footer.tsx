@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Application Footer
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Brand footer with navigation links, contact details, medical disclaimer, and author credits.
+ */
+
 import React from 'react';
 import { Mail, ArrowRight } from 'lucide-react';
 
@@ -222,9 +229,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGenerator, onOpenCalculato
       </div>
 
       <div className="border-t border-border">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between gap-3 text-[10px] font-space text-faint">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-3 text-[10px] font-space text-faint">
           <div>© 2026 PYROFIT · Precision Fueling · Smart Training</div>
-          <div>Not medical advice · Consult a doctor before beginning a new training program</div>
+          <div className="flex items-center gap-2">
+            <span>Engineered by <span className="text-muted font-medium">Ojas Ulhas Dighe</span></span>
+            <span>·</span>
+            <span>Nov 15, 2026</span>
+          </div>
+          <div>Not medical advice · Consult a doctor before training</div>
         </div>
       </div>
     </footer>

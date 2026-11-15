@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Couch to 5K Banner
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: High-conversion banner targeting beginner athletes with an 8-week structured run-walk ramp.
+ */
+
 import React from 'react';
 import { Footprints, ArrowRight } from 'lucide-react';
 

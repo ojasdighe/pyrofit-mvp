@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Curated Sample Plans Modal
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: 8 curated running training blueprints across 7 methodologies with distance filter pills and generator links.
+ */
+
 import React, { useState } from 'react';
 import { X, Zap, Clock, BarChart2, User } from 'lucide-react';
 
