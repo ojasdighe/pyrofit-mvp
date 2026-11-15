@@ -1,3 +1,10 @@
+/**
+ * PYROFIT MVP — Post-Session Feedback & Adaptive Learning View
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Rate My Session feedback form, outcome logging (Optimal/Cramping/Crashed/Bloated),
+ *              adaptive multiplier display, and Gut-Safe Filter state. Guards entry until first session logged.
+ */
 import React, { useState } from 'react';
 import {
   Zap,

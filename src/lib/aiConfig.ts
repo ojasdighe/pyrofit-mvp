@@ -1,27 +1,17 @@
 /**
- * Pyrofit AI Configuration Manager
- * Supports multiple AI providers: OpenAI, Anthropic, Google Gemini, Mistral, or any OpenAI-compatible API
- * 
+ * PYROFIT MVP — AI Configuration Manager
+ * Author: Ojas Ulhas Dighe
+ * Date: 2026-11-15
+ * Description: Multi-provider AI orchestration supporting OpenAI, Anthropic, Google Gemini, Mistral, and custom endpoints.
+ *
  * CONFIGURATION METHODS:
- * 
+ *
  * 1. Via Browser Console (for development/testing):
  *    ```javascript
- *    // Import the config manager
- *    import { aiConfigManager } from './lib/aiConfig';
- *    
- *    // Configure OpenAI
  *    aiConfigManager.setProvider('openai', 'sk-your-openai-key');
- *    
- *    // Configure Anthropic
  *    aiConfigManager.setProvider('anthropic', 'sk-ant-your-key');
- *    
- *    // Configure Gemini
  *    aiConfigManager.setProvider('gemini', 'your-gemini-api-key');
- *    
- *    // Configure Mistral
  *    aiConfigManager.setProvider('mistral', 'your-mistral-key');
- *    
- *    // Configure custom OpenAI-compatible endpoint
  *    aiConfigManager.setConfig({
  *      provider: 'custom',
  *      apiKey: 'your-api-key',
@@ -29,7 +19,7 @@
  *      model: 'your-model-name'
  *    });
  *    ```
- * 
+ *
  * 2. Via localStorage (persists across sessions):
  *    ```javascript
  *    localStorage.setItem('pyrofit_ai_config_v1', JSON.stringify({
@@ -39,14 +29,13 @@
  *      model: 'gpt-4o-mini'
  *    }));
  *    ```
- * 
+ *
  * 3. Environment Variables (for deployment):
- *    Set these in your .env file or hosting environment:
  *    - VITE_AI_PROVIDER=openai
  *    - VITE_AI_API_KEY=sk-your-key
  *    - VITE_AI_BASE_URL=https://api.openai.com/v1
  *    - VITE_AI_MODEL=gpt-4o-mini
- * 
+ *
  * DEFAULT: FreeLLM API at http://127.0.0.1:3001/v1
  */
 
