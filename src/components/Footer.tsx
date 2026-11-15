@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGenerator, onOpenCalculato
     <footer className="border-t border-border mt-20">
       {/* Ready Banner */}
       <section
-        className="py-28 px-8 md:px-20 border-b border-border text-center relative overflow-hidden"
+        className="py-16 md:py-28 px-4 sm:px-8 md:px-20 border-b border-border text-center relative overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, rgba(255,107,26,0.04) 0%, transparent 60%)',
         }}
@@ -82,14 +82,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGenerator, onOpenCalculato
                 </span>
               </a>
               <a
-                href="https://www.strava.com/clubs/2068012"
+                href="https://www.strava.com/clubs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-faint hover:text-strava transition-colors group"
               >
                 <span className="text-xs font-bold text-strava">STR</span>
                 <span className="text-[11px] font-space uppercase tracking-widest group-hover:text-strava">
-                  Join Run Club
+                  Find a Run Club on Strava
                 </span>
               </a>
             </div>
@@ -229,7 +229,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGenerator, onOpenCalculato
       </div>
 
       <div className="border-t border-border">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-3 text-[10px] font-space text-faint">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-space text-faint text-center sm:text-left">
           <div>© 2026 PYROFIT · Precision Fueling · Smart Training</div>
           <div className="flex items-center gap-2">
             <span>Engineered by <span className="text-muted font-medium">Ojas Ulhas Dighe</span></span>

@@ -95,7 +95,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, 
         </div>
 
         {/* Stats bar pinned to bottom */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-brand/30 bg-black/60 backdrop-blur-sm flex justify-center gap-16 py-5">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-brand/30 bg-black/60 backdrop-blur-sm flex justify-center gap-6 sm:gap-16 py-4 sm:py-5 overflow-x-auto">
           <div className="text-center">
             <div className="italic-heavy text-3xl text-strava">10</div>
             <div className="text-[9px] font-space text-faint uppercase tracking-widest mt-0.5">Methodologies</div>

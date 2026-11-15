@@ -94,7 +94,7 @@ export const FuelingStrategyView: React.FC<FuelingStrategyViewProps> = ({
     <div className="space-y-8 animate-in fade-in duration-200">
       {/* Telemetry Alert Banner if clicked */}
       {lastTelemetryNotice && (
-        <div className="p-3 bg-strava/10 border border-strava/30 text-xs font-space text-strava flex items-center justify-between rounded-sm">
+        <div className="p-3 bg-strava/10 border border-strava/30 text-xs font-space text-strava flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 rounded-sm">
           <div className="flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-strava flex-shrink-0" />
             <span>{lastTelemetryNotice}</span>

@@ -889,11 +889,11 @@ export const AthleteProfileView: React.FC<AthleteProfileViewProps> = ({
         </div>
       )}
 
-      <div className="flex justify-end">
+      <div className="flex flex-col sm:flex-row justify-end gap-3">
         <button
           type="button"
           onClick={handleSave}
-          className="bg-strava italic-heavy text-on-brand py-3 px-10 text-sm font-black shadow-[0_8px_30px_rgba(255,107,26,0.25)] hover:shadow-[0_12px_40px_rgba(255,107,26,0.4)] hover:bg-white transition-all"
+          className="w-full sm:w-auto bg-strava italic-heavy text-on-brand py-3 px-10 text-sm font-black shadow-[0_8px_30px_rgba(255,107,26,0.25)] hover:shadow-[0_12px_40px_rgba(255,107,26,0.4)] hover:bg-white transition-all"
         >
           SAVE PROFILE
         </button>

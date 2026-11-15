@@ -279,7 +279,7 @@ export const App: React.FC = () => {
           {/* Top Fueling Callout Strip */}
           <div className="pt-16">
             <div
-              className="border-b border-strava/30 px-6 py-2.5 flex items-center justify-between flex-wrap gap-2 text-xs font-space bg-strava/5 cursor-pointer hover:bg-strava/10 transition-colors"
+              className="border-b border-strava/30 px-4 sm:px-6 py-2.5 flex items-center justify-between flex-wrap gap-2 text-xs font-space bg-strava/5 cursor-pointer hover:bg-strava/10 transition-colors"
               onClick={() => switchTab('fuel')}
             >
               <div className="flex items-center gap-2">
@@ -304,7 +304,7 @@ export const App: React.FC = () => {
           />
 
           {/* Pyrofit Interactive Section Callout inside landing */}
-          <section className="py-16 px-8 md:px-20 border-b border-border bg-gradient-to-r from-strava/[0.08] via-carbon to-carbon">
+          <section className="py-12 md:py-16 px-4 sm:px-8 md:px-20 border-b border-border bg-gradient-to-r from-strava/[0.08] via-carbon to-carbon">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="max-w-2xl">
                 <div className="text-[10px] font-space text-strava tracking-[0.4em] uppercase font-bold flex items-center gap-2 mb-2">

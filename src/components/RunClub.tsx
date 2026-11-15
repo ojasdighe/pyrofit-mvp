@@ -3,10 +3,10 @@ import { Footprints, Megaphone, Users } from 'lucide-react';
 
 export const RunClub: React.FC = () => {
   return (
-    <section id="run-club" className="py-24 px-8 md:px-20 border-t border-border bg-carbon">
+    <section id="run-club" className="py-16 md:py-24 px-4 sm:px-8 md:px-20 border-t border-border bg-carbon">
       <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
-          <div className="flex-1">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-20 items-center">
+          <div className="flex-1 w-full">
             <div className="text-strava font-space text-[9px] tracking-[0.6em] uppercase mb-4">
               Run with us
             </div>
@@ -17,7 +17,7 @@ export const RunClub: React.FC = () => {
               JOIN THE<br />
               <span className="text-faint">PACK.</span>
             </h2>
-            <p className="text-muted text-base font-light leading-relaxed mb-6 max-w-md">
+            <p className="text-muted text-sm md:text-base font-light leading-relaxed mb-6 max-w-md">
               The PYROFIT run club is where the plans meet the pavement. Weekly group runs, race-day meetups, and a crew that actually shows up.
             </p>
 
@@ -37,15 +37,15 @@ export const RunClub: React.FC = () => {
             </ul>
 
             <a
-              href="https://www.strava.com/clubs/2068012"
+              href="https://www.strava.com/clubs"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 bg-[#FC4C02] text-white italic-heavy py-4 px-10 text-sm tracking-wider relative overflow-hidden transition-all shadow-[0_8px_32px_rgba(252,76,2,0.3)] hover:shadow-[0_12px_40px_rgba(252,76,2,0.45)]"
+              className="group inline-flex items-center justify-center gap-3 w-full sm:w-auto bg-[#FC4C02] text-white italic-heavy py-4 px-8 sm:px-10 text-sm tracking-wider relative overflow-hidden transition-all shadow-[0_8px_32px_rgba(252,76,2,0.3)] hover:shadow-[0_12px_40px_rgba(252,76,2,0.45)]"
             >
               <svg className="w-5 h-5 fill-current relative z-10" viewBox="0 0 24 24">
                 <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
               </svg>
-              <span className="relative z-10 font-bold">JOIN PYROFIT RUN CLUB</span>
+              <span className="relative z-10 font-bold">Find a Run Club on Strava</span>
               <div className="absolute inset-0 bg-white/20 translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
             </a>
           </div>
