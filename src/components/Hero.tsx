@@ -37,7 +37,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, 
         />
 
         {/* Centered content */}
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-6 flex flex-col items-center">
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-6 flex flex-col items-center pb-24 sm:pb-28">
           <h1
             className="italic-heavy brand-glow text-fg mb-4 leading-[0.85] tracking-tighter"
             style={{ fontSize: 'clamp(4rem, 10vw, 9rem)' }}
