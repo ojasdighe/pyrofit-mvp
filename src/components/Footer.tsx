@@ -56,7 +56,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGenerator, onOpenCalculato
               Precision Fueling · Smart Training · Race Ready
             </div>
             <p className="text-muted text-[13px] font-space leading-relaxed mb-6">
-              Precision running training plans built on 10 elite methodologies. Free to use — build in your browser, or sign in to track your training, sync your watch, and get mentored.
+              Precision fueling and training plans for endurance athletes. Built on 10 elite methodologies. Free to use — build in your browser, or sign in to track your training, sync your watch, and get mentored.
             </p>
             <div className="flex flex-col gap-2.5">
               <a

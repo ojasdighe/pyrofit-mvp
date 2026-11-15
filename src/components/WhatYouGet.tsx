@@ -96,7 +96,7 @@ export const WhatYouGet: React.FC<WhatYouGetProps> = ({ onOpenGenerator, onOpenE
                 STARTING FROM ZERO? SAME TOOL
               </h3>
               <p className="text-muted text-sm leading-relaxed font-light">
-                8-week Couch-to-5K run-walk ramp for anyone who's never run a step. No jargon, no pace zones. Just 3 sessions a week that systematically build a real runner.
+                8-week Couch-to-5K run-walk ramp for anyone who's never run a step. No jargon, no pace zones. Just 3 sessions a week that systematically build a real runner. Whether you're new to running, cycling, or triathlon — the same system works.
               </p>
             </div>
             <div className="mt-6 text-[10px] font-space text-strava tracking-widest uppercase flex items-center gap-1 group-hover:translate-x-1 transition-transform">

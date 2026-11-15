@@ -22,7 +22,7 @@ export const MoreThanAPlan: React.FC<MoreThanAPlanProps> = ({ onOpenGenerator })
               <span className="text-faint">A PLAN.</span>
             </h2>
             <p className="text-muted text-base font-light mt-4 max-w-md">
-              A plan gets you started. PYROFIT keeps going — track every run, sharpen with a mentor, and grow season after season.
+              A plan gets you started. PYROFIT keeps going — track every session, sharpen with a mentor, and grow season after season.
             </p>
           </div>
           <button
@@ -42,10 +42,10 @@ export const MoreThanAPlan: React.FC<MoreThanAPlanProps> = ({ onOpenGenerator })
               </span>
             </div>
             <h3 className="italic-heavy text-xl mb-3 group-hover:text-strava transition-colors">
-              Track every run
+              Track every session
             </h3>
             <p className="text-muted text-sm leading-relaxed font-light flex-1">
-              Log sessions, connect your Garmin, Suunto, or COROS, and watch your fitness, weekly load, readiness, and PRs in one dashboard.
+              Log sessions, connect your Garmin, Suunto, or COROS, and watch your fitness, weekly load, readiness, and PRs across any sport in one dashboard.
             </p>
           </div>
 

@@ -22,7 +22,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, 
         style={{ background: 'rgba(255,107,26,0.04)' }}
       >
         <div className="animate-marquee font-space text-xs tracking-[0.5em] text-strava/80 uppercase">
-          PYROFIT // PRECISION FUELING // SMART TRAINING // RACE READY // NEON ORANGE // 10 METHODOLOGIES // VDOT SCIENCE // LYDIARD BASE // PYROFIT // PRECISION FUELING // SMART TRAINING // RACE READY // NEON ORANGE // 10 METHODOLOGIES // VDOT SCIENCE // LYDIARD BASE //
+          RUNNERS // CYCLISTS // TRIATHLETES // SWIMMERS // TRAIL ATHLETES // PRECISION FUELING // SMART TRAINING // RACE READY // PYROFIT // RUNNERS // CYCLISTS // TRIATHLETES // SWIMMERS // TRAIL ATHLETES // PRECISION FUELING // SMART TRAINING // RACE READY // PYROFIT //
         </div>
       </div>
 
@@ -30,8 +30,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, 
       <section className="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden border-b border-border">
         {/* Background image */}
         <img
-          src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?q=80&w=1600&auto=format&fit=crop"
-          alt="Runner in motion on track"
+          src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1600&auto=format&fit=crop"
+          alt="Endurance athletes in action"
           className="absolute inset-0 w-full h-full object-cover object-center"
           style={{ filter: 'brightness(0.25)' }}
         />
@@ -46,7 +46,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, 
           </h1>
 
           <p className="text-muted font-space text-sm tracking-[0.3em] uppercase mb-8">
-            Science-backed running plans. Zero fluff.
+            Precision fueling and training for every endurance athlete.
           </p>
 
           {/* CTA Buttons */}
@@ -91,22 +91,28 @@ export const Hero: React.FC<HeroProps> = ({ onOpenGenerator, onOpenCalculators, 
             >
               FUEL COMPARE →
             </a>
+            <a
+              href="#go-deeper"
+              className="border border-strava/30 bg-strava/5 text-strava/90 hover:bg-strava/10 px-4 py-2 italic-heavy text-xs tracking-[0.3em] transition-colors"
+            >
+              TRIATHLON FUELING →
+            </a>
           </div>
         </div>
 
         {/* Stats bar pinned to bottom */}
         <div className="absolute bottom-0 left-0 right-0 border-t border-brand/30 bg-black/60 backdrop-blur-sm flex justify-center gap-6 sm:gap-16 py-4 sm:py-5 overflow-x-auto">
           <div className="text-center">
+            <div className="italic-heavy text-3xl text-strava">5</div>
+            <div className="text-[9px] font-space text-faint uppercase tracking-widest mt-0.5">Sports Supported</div>
+          </div>
+          <div className="text-center">
             <div className="italic-heavy text-3xl text-strava">10</div>
             <div className="text-[9px] font-space text-faint uppercase tracking-widest mt-0.5">Methodologies</div>
           </div>
           <div className="text-center">
-            <div className="italic-heavy text-3xl text-strava">7</div>
-            <div className="text-[9px] font-space text-faint uppercase tracking-widest mt-0.5">Workout Types</div>
-          </div>
-          <div className="text-center">
             <div className="italic-heavy text-3xl text-strava">40+</div>
-            <div className="text-[9px] font-space text-faint uppercase tracking-widest mt-0.5">Long-form Guides</div>
+            <div className="text-[9px] font-space text-faint uppercase tracking-widest mt-0.5">Guides</div>
           </div>
         </div>
       </section>
