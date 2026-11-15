@@ -219,9 +219,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGenerator, onOpenCalculato
         </div>
 
         <div className="flex flex-wrap gap-x-6 gap-y-3 pt-8 text-[10px] font-space uppercase tracking-[0.3em]">
-          <a href="#how-it-works" className="text-faint hover:text-strava transition-colors">How it works</a>
+          <a href="#training-science" className="text-faint hover:text-strava transition-colors">How it works</a>
           <a href="#four-levers" className="text-faint hover:text-strava transition-colors">Four Levers</a>
           <a href="#testimonials" className="text-faint hover:text-strava transition-colors">Athlete Stories</a>
+          <a href="#run-club" className="text-faint hover:text-strava transition-colors">Run Club</a>
           <a href="#faq" className="text-faint hover:text-strava transition-colors">FAQ</a>
           <a href="#" className="text-faint hover:text-strava transition-colors">Privacy</a>
           <a href="#" className="text-faint hover:text-strava transition-colors">Terms</a>
