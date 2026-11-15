@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Activity, Users, TrendingUp, ArrowRight } from 'lucide-react';
 
 interface MoreThanAPlanProps {
@@ -22,7 +22,7 @@ export const MoreThanAPlan: React.FC<MoreThanAPlanProps> = ({ onOpenGenerator })
               <span className="text-faint">A PLAN.</span>
             </h2>
             <p className="text-muted text-base font-light mt-4 max-w-md">
-              A plan gets you started. STRIDD keeps going — track every run, sharpen with a mentor, and grow season after season.
+              A plan gets you started. PYROFIT keeps going — track every run, sharpen with a mentor, and grow season after season.
             </p>
           </div>
           <button

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 export const FAQ: React.FC = () => {
@@ -6,19 +6,19 @@ export const FAQ: React.FC = () => {
 
   const faqs = [
     {
-      q: 'Is STRIDD really free to use?',
-      a: 'Yes — STRIDD is free to use. You can build a full plan in your browser without signing in, or create a free account to save and sync your plan, log your training, and connect your watch. See our Privacy Policy for what we store.',
+      q: 'Is PYROFIT really free to use?',
+      a: 'Yes — PYROFIT is free to use. You can build a full plan in your browser without signing in, or create a free account to save and sync your plan, log your training, and connect your watch. See our Privacy Policy for what we store.',
     },
     {
-      q: 'What do I get with a free STRIDD account?',
+      q: 'What do I get with a free PYROFIT account?',
       a: 'Building a plan needs no account. Sign in (free) to save and sync your plan across devices, log every session, connect your watch (direct Garmin, Suunto, COROS, and Intervals.icu), see your training analytics, and link up with a mentor for mentoring. Your data stays yours and is exportable any time.',
     },
     {
-      q: 'Can I track my training and log my runs in STRIDD?',
-      a: 'Yes. With a free account, STRIDD doubles as your training log — mark sessions complete, record distance, time and effort, and connect your watch so recent runs import automatically. Your athlete dashboard then shows weekly load, fitness trend, readiness, and how your pace zones are progressing.',
+      q: 'Can I track my training and log my runs in PYROFIT?',
+      a: 'Yes. With a free account, PYROFIT doubles as your training log — mark sessions complete, record distance, time and effort, and connect your watch so recent runs import automatically. Your athlete dashboard then shows weekly load, fitness trend, readiness, and how your pace zones are progressing.',
     },
     {
-      q: 'Can I get a mentor or mentor on STRIDD?',
+      q: 'Can I get a mentor or mentor on PYROFIT?',
       a: 'Yes. Once you have an account you can connect with a mentor. Your mentor sees your plan and recent training, proposes adjustments you approve, sends individual workouts, and can group you into a squad. You stay in control — nothing in your plan changes without your sign-off.',
     },
     {
@@ -27,14 +27,14 @@ export const FAQ: React.FC = () => {
     },
     {
       q: 'How are my paces calculated?',
-      a: "STRIDD uses the Jack Daniels VDOT tables cross-checked with Riegel's race-prediction formula. You give us a recent race time — we compute VDOT, derive every training zone from it, and adjust the target zones across Base / Build / Peak / Taper phases.",
+      a: "PYROFIT uses the Jack Daniels VDOT tables cross-checked with Riegel's race-prediction formula. You give us a recent race time — we compute VDOT, derive every training zone from it, and adjust the target zones across Base / Build / Peak / Taper phases.",
     },
     {
-      q: 'Can I use STRIDD for an ultramarathon?',
-      a: 'Yes. STRIDD supports 5K, 10K, half-marathon, marathon, 50K and 100K+ distances. Ultra plans emphasise time-on-feet, back-to-back long runs and strength-endurance work instead of pure pace work.',
+      q: 'Can I use PYROFIT for an ultramarathon?',
+      a: 'Yes. PYROFIT supports 5K, 10K, half-marathon, marathon, 50K and 100K+ distances. Ultra plans emphasise time-on-feet, back-to-back long runs and strength-endurance work instead of pure pace work.',
     },
     {
-      q: 'Does STRIDD account for injury or illness?',
+      q: 'Does PYROFIT account for injury or illness?',
       a: 'The plan is a blueprint, not a prescription. If you are ill, injured or over-fatigued, skip the session or swap it for recovery. The plan is designed to tolerate a 10–15% deviation per week without losing fitness.',
     },
     {
@@ -43,7 +43,7 @@ export const FAQ: React.FC = () => {
     },
     {
       q: 'How often should I regenerate my plan?',
-      a: 'Every 4–6 weeks, or after a race, or whenever your fitness changes significantly. Re-enter your latest time trial or race result and STRIDD will rebuild your zones.',
+      a: 'Every 4–6 weeks, or after a race, or whenever your fitness changes significantly. Re-enter your latest time trial or race result and PYROFIT will rebuild your zones.',
     },
     {
       q: 'What if I miss a workout?',

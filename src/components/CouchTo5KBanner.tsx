@@ -40,7 +40,7 @@ export const CouchTo5KBanner: React.FC<CouchTo5KBannerProps> = ({ onStartCouch }
         <div className="flex flex-col gap-3 flex-shrink-0">
           <button
             onClick={onStartCouch}
-            className="group relative bg-strava italic-heavy text-on-brand py-4 px-10 text-base overflow-hidden transition-all whitespace-nowrap shadow-[0_16px_48px_rgba(204,255,0,0.25)] hover:shadow-[0_20px_50px_rgba(204,255,0,0.4)]"
+            className="group relative bg-strava italic-heavy text-on-brand py-4 px-10 text-base overflow-hidden transition-all whitespace-nowrap shadow-[0_16px_48px_rgba(255,107,26,0.25)] hover:shadow-[0_20px_50px_rgba(255,107,26,0.4)]"
           >
             <span className="relative z-10 flex items-center gap-2">
               START HERE <ArrowRight className="w-4 h-4" />

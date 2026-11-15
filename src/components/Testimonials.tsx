@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export const Testimonials: React.FC = () => {
   const reviews = [
@@ -8,7 +8,7 @@ export const Testimonials: React.FC = () => {
       role: 'First-time marathoner, Pune',
       highlight: 'Never hit the wall.',
       quote:
-        'First marathon, zero clue how to train. STRIDD gave me a 16-week Daniels plan — finished TMM in 4:52 and never hit the wall.',
+        'First marathon, zero clue how to train. PYROFIT gave me a 16-week Daniels plan — finished TMM in 4:52 and never hit the wall.',
     },
     {
       initials: 'AD',
@@ -32,15 +32,15 @@ export const Testimonials: React.FC = () => {
       role: 'Tokyo Marathon finisher, Mumbai',
       highlight: 'First world major.',
       quote:
-        'Ran my first world major in Tokyo off a STRIDD Lydiard plan. Having the base phase mapped out week by week kept me honest.',
+        'Ran my first world major in Tokyo off a PYROFIT Lydiard plan. Having the base phase mapped out week by week kept me honest.',
     },
     {
       initials: 'DN',
       name: 'Deepa N.',
       role: 'Run club pacer, Bengaluru',
-      highlight: 'I send everyone to STRIDD.',
+      highlight: 'I send everyone to PYROFIT.',
       quote:
-        'I run a group of 30 runners in Indiranagar. I send everyone to STRIDD now — ten methodologies, free, and they can pick what fits.',
+        'I run a group of 30 runners in Indiranagar. I send everyone to PYROFIT now — ten methodologies, free, and they can pick what fits.',
     },
     {
       initials: 'KP',
@@ -48,7 +48,7 @@ export const Testimonials: React.FC = () => {
       role: 'Weekend warrior, Hyderabad',
       highlight: 'Legs felt fresh on race day.',
       quote:
-        'Did the Goa River Marathon on a Pfitzinger plan from STRIDD. The recovery weeks were perfectly timed — legs felt fresh on race day.',
+        'Did the Goa River Marathon on a Pfitzinger plan from PYROFIT. The recovery weeks were perfectly timed — legs felt fresh on race day.',
     },
   ];
 
@@ -69,7 +69,7 @@ export const Testimonials: React.FC = () => {
             </h2>
           </div>
           <div className="text-muted text-sm font-light max-w-sm leading-relaxed">
-            Every methodology in STRIDD is battle-tested by the running community. No fluff. Just precision training science — free to use.
+            Every methodology in PYROFIT is battle-tested by the running community. No fluff. Just precision training science — free to use.
           </div>
         </div>
 

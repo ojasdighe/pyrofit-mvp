@@ -212,7 +212,7 @@ export const AICopilotDrawer: React.FC<AICopilotDrawerProps> = ({
                 AI Sports Scientist
               </div>
               <div className="text-faint text-[10px]">
-                Powered by FreeLLMAPI · Context-aware
+                Multi-provider AI · Context-aware
               </div>
             </div>
           </div>

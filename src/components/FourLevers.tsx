@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
 interface FourLeversProps {
@@ -10,7 +10,7 @@ export const FourLevers: React.FC<FourLeversProps> = ({ onOpenGenerator }) => {
     {
       num: '01',
       title: 'CONSISTENCY',
-      desc: 'Aerobic fitness is a debt that must be paid daily. STRIDD plans are built to be sustainable, not heroic.',
+      desc: 'Aerobic fitness is a debt that must be paid daily. PYROFIT plans are built to be sustainable, not heroic.',
     },
     {
       num: '02',

@@ -9,10 +9,55 @@ A full-stack web application for endurance athletes: science-backed fueling plan
 ```bash
 cd c:\Workspace\pyrofit_mvp
 npm install
+
+# Configure AI provider (optional - defaults to FreeLLM)
+cp .env.example .env
+# Edit .env with your AI provider settings
+
 npm run dev
 ```
 
-Open `http://localhost:3000`. FreeLLM API must be running on `http://localhost:3001` for AI features.
+Open `http://localhost:3000`.
+
+---
+
+## AI Provider Configuration
+
+Pyrofit supports multiple AI providers for the AI Sports Scientist features:
+- **FreeLLM** (default): Local API gateway at http://127.0.0.1:3001/v1
+- **OpenAI**: GPT-4o, GPT-4 Turbo, GPT-3.5 Turbo
+- **Anthropic**: Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku
+- **Google Gemini**: Gemini 1.5 Flash, Gemini 1.5 Pro
+- **Mistral AI**: Mistral Small, Medium, Large
+- **Custom**: Any OpenAI-compatible API endpoint
+
+### Configuration Methods
+
+**1. Environment Variables (.env file):**
+```bash
+VITE_AI_PROVIDER=openai
+VITE_AI_API_KEY=sk-your-api-key
+VITE_AI_BASE_URL=https://api.openai.com/v1
+VITE_AI_MODEL=gpt-4o-mini
+```
+
+**2. Browser Console (runtime):**
+```javascript
+import { aiConfigManager } from './lib/aiConfig';
+aiConfigManager.setProvider('openai', 'sk-your-key');
+```
+
+**3. localStorage (persists):**
+```javascript
+localStorage.setItem('pyrofit_ai_config_v1', JSON.stringify({
+  provider: 'openai',
+  apiKey: 'sk-your-key',
+  baseURL: 'https://api.openai.com/v1',
+  model: 'gpt-4o-mini'
+}));
+```
+
+See `.env.example` for all provider configurations.
 
 ---
 
@@ -29,10 +74,13 @@ Fully deterministic — no AI estimation in any calculation.
 | Sodium/hr | (400mg × E + C × 200mg) × sodium_multiplier |
 | Fluids/hr | 500ml × E (or sweat_rate_l_hr × 1000 × E if custom rate set) |
 
-### 5-Tab Navigation
-| Tab | Route | Purpose |
+### Unified 4-Pillar Architecture & Deep Linking
+| Pillar | Route / Hash | Purpose |
 |---|---|---|
-| Athlete Profile | `/profile` | Full Section 2.1/2.2 form — sport, body, dietary, preferences, training cycle, race countdown |
+| **Training Plans** | `#plans` | Full race training blueprints (5K to Marathon), Couch to 5K, 10 training systems, 4 levers |
+| **Fuel Engine** | `#fuel` | Precision fueling calculator: Express Mode (3 inputs) or Elite Tuning (8 levers), 3-phase timeline, Live Timer |
+| **Gear & Lab** | `#lab` | Laboratory desk: Carbon super-shoes, GPS sports watches, 10 training philosophies, 18-race catalog |
+| **Athlete Profile** | `#profile` | Full profile form — physical details, dietary exclusions, sweat profile, self-service AI provider setup |
 | Session Planner | `/planner` | Configurator + 3-phase fueling strategy + session history |
 | Product Compare | `/compare` | 39-product filterable grid with FDA nutrition panels + cost-efficiency metrics |
 | Post-Workout | `/feedback` | Adaptive ML feedback loop + AI physiological explainer |

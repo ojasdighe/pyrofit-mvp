@@ -175,6 +175,7 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
 
   // ── Compare select state ──
   const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [clickError, setClickError] = useState<string | null>(null);
 
   // ── Filtered + sorted products ──
   const displayedProducts = useMemo(() => {
@@ -240,7 +241,8 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
         getOrCreateAthleteId()
       );
     } catch (err: any) {
-      alert(err.message);
+      setClickError(err?.message ?? 'Failed to record click. Please try again.');
+      setTimeout(() => setClickError(null), 4000);
     }
   };
 
@@ -251,67 +253,67 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
     higherIsBetter: boolean;
     render: (p: FuelProduct) => string;
   }> = [
-    {
-      key: 'name',
-      label: 'Product',
-      higherIsBetter: false,
-      render: (p) => `${p.brand} ${p.name}`,
-    },
-    {
-      key: 'calories_kcal',
-      label: 'Calories',
-      higherIsBetter: true,
-      render: (p) => (p.calories_kcal != null ? `${p.calories_kcal} kcal` : '—'),
-    },
-    {
-      key: 'carbs_g',
-      label: 'Carbs',
-      higherIsBetter: true,
-      render: (p) => `${p.carbs_g}g`,
-    },
-    {
-      key: 'sodium_mg',
-      label: 'Sodium',
-      higherIsBetter: true,
-      render: (p) => `${p.sodium_mg}mg`,
-    },
-    {
-      key: 'protein_g',
-      label: 'Protein',
-      higherIsBetter: true,
-      render: (p) => `${p.protein_g}g`,
-    },
-    {
-      key: 'caffeine_mg',
-      label: 'Caffeine',
-      higherIsBetter: true,
-      render: (p) => (p.caffeine_mg != null ? `${p.caffeine_mg}mg` : '—'),
-    },
-    {
-      key: 'cost_per_25g_carb',
-      label: 'Cost / 25g Carb',
-      higherIsBetter: false,
-      render: (p) => fmt(p.cost_per_25g_carb),
-    },
-    {
-      key: 'cost_per_500mg_sodium',
-      label: 'Cost / 500mg Na',
-      higherIsBetter: false,
-      render: (p) => fmt(p.cost_per_500mg_sodium),
-    },
-    {
-      key: 'cost_per_20g_protein',
-      label: 'Cost / 20g Protein',
-      higherIsBetter: false,
-      render: (p) => fmt(p.cost_per_20g_protein),
-    },
-    {
-      key: 'price_inr',
-      label: 'Price / serving',
-      higherIsBetter: false,
-      render: (p) => `₹${p.price_inr}`,
-    },
-  ];
+      {
+        key: 'name',
+        label: 'Product',
+        higherIsBetter: false,
+        render: (p) => `${p.brand} ${p.name}`,
+      },
+      {
+        key: 'calories_kcal',
+        label: 'Calories',
+        higherIsBetter: true,
+        render: (p) => (p.calories_kcal != null ? `${p.calories_kcal} kcal` : '—'),
+      },
+      {
+        key: 'carbs_g',
+        label: 'Carbs',
+        higherIsBetter: true,
+        render: (p) => `${p.carbs_g}g`,
+      },
+      {
+        key: 'sodium_mg',
+        label: 'Sodium',
+        higherIsBetter: true,
+        render: (p) => `${p.sodium_mg}mg`,
+      },
+      {
+        key: 'protein_g',
+        label: 'Protein',
+        higherIsBetter: true,
+        render: (p) => `${p.protein_g}g`,
+      },
+      {
+        key: 'caffeine_mg',
+        label: 'Caffeine',
+        higherIsBetter: true,
+        render: (p) => (p.caffeine_mg != null ? `${p.caffeine_mg}mg` : '—'),
+      },
+      {
+        key: 'cost_per_25g_carb',
+        label: 'Cost / 25g Carb',
+        higherIsBetter: false,
+        render: (p) => fmt(p.cost_per_25g_carb),
+      },
+      {
+        key: 'cost_per_500mg_sodium',
+        label: 'Cost / 500mg Na',
+        higherIsBetter: false,
+        render: (p) => fmt(p.cost_per_500mg_sodium),
+      },
+      {
+        key: 'cost_per_20g_protein',
+        label: 'Cost / 20g Protein',
+        higherIsBetter: false,
+        render: (p) => fmt(p.cost_per_20g_protein),
+      },
+      {
+        key: 'price_inr',
+        label: 'Price / serving',
+        higherIsBetter: false,
+        render: (p) => `₹${p.price_inr}`,
+      },
+    ];
 
   const isBestInRow = (
     rowKey: keyof FuelProduct | string,
@@ -339,6 +341,12 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
   // ── Render ──
   return (
     <div className="relative min-h-screen bg-bg text-fg pb-48">
+      {/* Inline error toast */}
+      {clickError && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-500/15 border border-red-500/40 text-red-400 text-xs font-space px-4 py-2 flex items-center gap-2 shadow-lg">
+          <span>⚠</span> {clickError}
+        </div>
+      )}
       {/* ── Sticky filter panel ── */}
       <div className="sticky top-0 z-30 bg-bg border-b border-border px-4 py-3 space-y-3">
         {/* Category pills */}
@@ -347,11 +355,10 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
             <button
               key={cat}
               onClick={() => setCategoryFilter(cat)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
-                categoryFilter === cat
+              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${categoryFilter === cat
                   ? 'bg-strava text-on-brand border-strava'
                   : 'bg-surface border-border text-muted hover:border-strava/60'
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -367,11 +374,10 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
               <button
                 key={o}
                 onClick={() => setOriginFilter(o)}
-                className={`px-2.5 py-0.5 rounded text-xs border transition-colors ${
-                  originFilter === o
+                className={`px-2.5 py-0.5 rounded text-xs border transition-colors ${originFilter === o
                     ? 'bg-strava text-on-brand border-strava'
                     : 'bg-surface border-border text-muted hover:border-strava/60'
-                }`}
+                  }`}
               >
                 {o === 'ALL' ? 'All' : o === 'DOMESTIC_INDIA' ? '🇮🇳 Domestic' : '🌐 International'}
               </button>
@@ -385,11 +391,10 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
               <button
                 key={t}
                 onClick={() => setTierFilter(t)}
-                className={`px-2.5 py-0.5 rounded text-xs border transition-colors ${
-                  tierFilter === t
+                className={`px-2.5 py-0.5 rounded text-xs border transition-colors ${tierFilter === t
                     ? 'bg-strava text-on-brand border-strava'
                     : 'bg-surface border-border text-muted hover:border-strava/60'
-                }`}
+                  }`}
               >
                 {t}
               </button>
@@ -437,9 +442,8 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
           return (
             <div
               key={product.id}
-              className={`bg-surface border p-4 rounded-lg flex flex-col gap-2 transition-colors ${
-                isSelected ? 'border-strava' : 'border-border'
-              }`}
+              className={`bg-surface border p-4 rounded-lg flex flex-col gap-2 transition-colors ${isSelected ? 'border-strava' : 'border-border'
+                }`}
             >
               {/* Row 1: compare checkbox + brand + name */}
               <div className="flex items-start gap-2">
@@ -542,13 +546,12 @@ export const ProductCompareView: React.FC<ProductCompareViewProps> = () => {
               {/* Row 7: data confidence + verified date */}
               <div className="flex items-center gap-2 text-[10px] text-muted mt-0.5">
                 <span
-                  className={`px-1.5 py-0.5 rounded border ${
-                    product.data_confidence === 'HIGH'
+                  className={`px-1.5 py-0.5 rounded border ${product.data_confidence === 'HIGH'
                       ? 'border-emerald-400/40 text-emerald-400'
                       : product.data_confidence === 'MEDIUM'
-                      ? 'border-amber-400/40 text-amber-400'
-                      : 'border-red-400/40 text-red-400'
-                  }`}
+                        ? 'border-amber-400/40 text-amber-400'
+                        : 'border-red-400/40 text-red-400'
+                    }`}
                 >
                   {product.data_confidence} confidence
                 </span>

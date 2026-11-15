@@ -111,7 +111,7 @@ export const PlanGeneratorModal: React.FC<PlanGeneratorModalProps> = ({
         particleCount: 80,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#CCFF00', '#ffffff', '#283500'],
+        colors: ['#FF6B1A', '#ffffff', '#1a0800'],
       });
     } catch {}
 
@@ -492,7 +492,7 @@ export const PlanGeneratorModal: React.FC<PlanGeneratorModalProps> = ({
             </span>
             <button
               type="submit"
-              className="w-full sm:w-auto bg-strava italic-heavy text-on-brand py-4 px-12 text-lg font-black shadow-[0_12px_40px_rgba(204,255,0,0.3)] hover:shadow-[0_16px_50px_rgba(204,255,0,0.45)] hover:bg-white transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto bg-strava italic-heavy text-on-brand py-4 px-12 text-lg font-black shadow-[0_12px_40px_rgba(255,107,26,0.3)] hover:shadow-[0_16px_50px_rgba(255,107,26,0.45)] hover:bg-white transition-all flex items-center justify-center gap-2"
             >
               GENERATE BLUEPRINT <ChevronRight className="w-5 h-5" />
             </button>

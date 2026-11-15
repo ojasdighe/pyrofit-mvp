@@ -8,25 +8,27 @@
 
 1. [What Is Pyrofit?](#1-what-is-pyrofit)
 2. [Getting Started](#2-getting-started)
-3. [The Five Tabs — Your Control Center](#3-the-five-tabs)
-4. [Tab 1 — Athlete Profile](#4-tab-1--athlete-profile)
-5. [Tab 2 — Session Planner](#5-tab-2--session-planner)
-6. [Tab 3 — Product Compare](#6-tab-3--product-compare)
-7. [Tab 4 — Post-Workout Feedback](#7-tab-4--post-workout-feedback)
-8. [Tab 5 — B2B Analytics](#8-tab-5--b2b-analytics)
-9. [Feature Launcher — The 5 Power Tools](#9-feature-launcher--the-5-power-tools)
-10. [How the Fueling Math Works](#10-how-the-fueling-math-works)
-11. [Understanding Your Results](#11-understanding-your-results)
-12. [The Adaptive Learning Loop](#12-the-adaptive-learning-loop)
-13. [Product Catalog & Buying](#13-product-catalog--buying)
-14. [Practical Workflows — Step by Step](#14-practical-workflows--step-by-step)
-15. [Frequently Asked Questions](#15-frequently-asked-questions)
+3. [Unified 4-Pillar Architecture & Deep Linking](#3-unified-4-pillar-architecture--deep-linking)
+4. [The Fuel Engine Control Center](#4-the-fuel-engine-control-center)
+5. [Tab 1 — Athlete Profile & AI Config](#5-tab-1--athlete-profile--ai-config)
+6. [Tab 2 — Session Planner (Express vs Elite Mode)](#6-tab-2--session-planner-express-vs-elite-mode)
+7. [Tab 3 — Product Compare](#7-tab-3--product-compare)
+8. [Tab 4 — Post-Workout Feedback](#8-tab-4--post-workout-feedback)
+9. [Tab 5 — B2B Analytics](#9-tab-5--b2b-analytics)
+10. [Feature Launcher — The 5 Power Tools](#10-feature-launcher--the-5-power-tools)
+11. [Gear & Running Lab Desk](#11-gear--running-lab-desk)
+12. [How the Fueling Math Works](#12-how-the-fueling-math-works)
+13. [Understanding Your Results](#13-understanding-your-results)
+14. [The Adaptive Learning Loop](#14-the-adaptive-learning-loop)
+15. [Product Catalog & Buying](#15-product-catalog--buying)
+16. [Practical Workflows — Step by Step](#16-practical-workflows--step-by-step)
+17. [Frequently Asked Questions](#17-frequently-asked-questions)
 
 ---
 
 ## 1. What Is Pyrofit?
 
-Pyrofit is a precision fueling calculator for endurance athletes — runners, cyclists, and triathletes. It answers the three questions that determine whether you finish strong or blow up:
+Pyrofit is a precision fueling calculator and endurance training platform for runners, cyclists, and triathletes. It answers the three questions that determine whether you finish strong or blow up:
 
 - **How many grams of carbohydrate do I need per hour?**
 - **How much sodium do I need to prevent cramps?**
@@ -55,30 +57,54 @@ npm run dev
 
 Open `http://localhost:3000` in your browser.
 
-You will land on the **Pyrofit homepage**. The primary CTA — **"OPEN PYROFIT"** — takes you directly into the fueling engine. Click it.
-
-### First-Time Welcome Screen
-
-The first time you open the Hub (no profile saved yet), you will see a **welcome card** instead of the full interface. It shows three steps:
-
-1. Fill in your Athlete Profile
-2. Configure your session
-3. Get your targets and product recommendations
-
-Below the steps is a single **"Set Up My Profile →"** button. Click it. This takes you to the Athlete Profile tab.
-
-The full tab bar, feature launcher buttons, and advanced tools are intentionally hidden at this stage. They appear automatically once you have saved a profile and run your first calculation. This keeps the first experience clean.
+You can navigate anywhere instantly via the top navigation bar or direct URL hashes.
 
 ---
 
-## 3. The Five Tabs — Your Control Center
+## 3. Unified 4-Pillar Architecture & Deep Linking
 
-After saving your profile, the full Hub unlocks. A tab bar at the top gives access to five sections:
+Pyrofit is organized into four first-class pillars accessible directly from the top navigation bar at all times:
+
+| Pillar | URL Hash | Purpose |
+|--------|----------|---------|
+| **Training Plans** | `#plans` | Complete race training blueprints (5K to Marathon), Couch to 5K, 10 elite methodologies, four training levers, and community run club. |
+| **Fuel Engine** | `#fuel` | The precision fueling calculator: Express Mode (3 inputs) or Elite Tuning (8 levers), 3-phase strategy, live timer, and race simulator. |
+| **Gear & Lab** | `#lab` | The independent laboratory desk: head-to-head comparisons of carbon super-shoes, multi-band GPS watches, training methodologies, and 18 world race courses. |
+| **Athlete Profile** | `#profile` | Physiology baseline, dietary exclusions, sweat profile multipliers, and self-service AI Sports Scientist configuration. |
+
+### Direct Hash Links & Browser Back-Button Support
+
+Pyrofit features native browser hash routing. Clicking any card or modal updates your browser address bar. When you press the browser's **Back** button (or swipe back on mobile), the app returns to the previous view or closes the active overlay without kicking you out:
+
+- `#fuel` — Opens Fuel Engine
+- `#plans` — Returns to Training Plans overview
+- `#lab` — Opens Gear & Lab comparison desk
+- `#profile` — Opens Athlete Profile & AI setup
+- `#shoes` — Opens Carbon Shoe comparison
+- `#watches` — Opens GPS Watch comparison
+- `#events` — Opens 18-Race Course Intel table
+- `#exercises` — Opens 20 Running Strength Drills
+- `#injuries` — Opens Injury Prevention & Return Protocols
+- `#calculators` — Opens Jack Daniels VDOT & Riegel Race Predictor
+- `#generator` — Opens Custom Blueprint Generator
+- `#couch` — Opens 8-Week Couch to 5K Builder
+
+### Mobile Table Ergonomics
+
+Dense data tables (Shoes, Watches, Events) feature:
+1. **Pinned First Column**: When swiping horizontally on mobile screens, the shoe or watch model name remains pinned on the left edge.
+2. **Horizontal Swipe Indicators**: Clear visual hints remind mobile athletes that detailed specifications are available via swipe.
+
+---
+
+## 4. The Fuel Engine Control Center
+
+After saving your profile, the full Fuel Engine unlocks with a 5-tab workspace:
 
 | Tab | What You Do Here |
 |-----|-----------------|
-| **Athlete Profile** | Enter your physical details, dietary needs, goals, and event date. This personalises every calculation. |
-| **Session Planner** | Configure a specific workout (duration, intensity, temperature) and get your exact fueling protocol. |
+| **Athlete Profile** | Enter physical details, dietary needs, goals, and event date. This personalises every calculation. |
+| **Session Planner** | Configure a workout in Express or Elite Mode and get your exact fueling protocol. |
 | **Product Compare** | Browse and filter all 39 products in the catalog. Compare nutrition panels and cost-efficiency. |
 | **Post-Workout** | Log how you felt after a session. The engine adjusts your targets for next time. |
 | **History & Data** | View session history, feedback logs, product click telemetry, and export your data. |
@@ -243,9 +269,18 @@ The planner has two screens:
 
 ### Screen 1: Workout Configurator
 
-The configurator has three **Required** fields that you must set before calculating, and an **Advanced Options** section that starts collapsed. You do not need to open Advanced Options to get a complete fueling protocol — the three required fields are sufficient.
+The configurator features a dual-mode control at the top:
 
-#### Required Field 1: Workout Duration
+```
+[ ⚡ Express Mode (3 Core Inputs) ]    [ ⚙️ Elite Tuning (All 8 Levers) ]
+```
+
+- **⚡ Express Mode**: Designed for quick race or workout planning in under 15 seconds. You only set the 3 Core Inputs (Duration, Intensity, Temperature/City). The engine applies intelligent standard defaults for terrain (Road), product tiers (All), and baseline cramping.
+- **⚙️ Elite Tuning**: Expands all 8 endurance levers — allowing you to tune Cramping Susceptibility, Formulation Tier (L1/L2/L3), Session Type (Race/Long Run/Training), Terrain (Road/Trail/Track), and exact Target Distance.
+
+---
+
+#### Core Input 1: Workout Duration
 
 A slider from 30 minutes to 300 minutes (5 hours), in 15-minute steps. Each field shows a small orange **Required** badge so you know immediately what matters.
 
@@ -259,7 +294,7 @@ The hours equivalent is displayed next to the slider in real time.
 
 ---
 
-#### Required Field 2: Training Intensity Level
+#### Core Input 2: Training Intensity Level
 
 Three options with their heart rate zone equivalents:
 
@@ -273,7 +308,7 @@ If you're unsure, **MID** is the safe default for most training runs.
 
 ---
 
-#### Required Field 3: Ambient Temperature
+#### Core Input 3: Ambient Temperature & Live Weather
 
 Enter the temperature in Celsius manually or use the **Live Weather Fetch** tool.
 
@@ -297,21 +332,17 @@ You can always override the fetched temperature manually.
 
 ---
 
-#### Advanced Options (collapsed by default)
+#### Elite Levers (Visible in Elite Tuning Mode)
 
-Click **"Advanced Options ▼"** to expand these fields. They add more context to your session but are not required to calculate a protocol.
+Click **"⚙️ Elite Tuning (All 8 Levers)"** to expand these controls.
 
 #### Athlete Body Weight
-
-Enter your weight in kg. The pre-workout carb priming target is `1.0g × weight_kg`. At 75 kg, you prime with 75g of carbs 45–60 minutes before the session starts.
-
-This field auto-populates from your profile. If you've recently changed weight, update it here before calculating.
+Enter your weight in kg. The pre-workout carb priming target is `1.0g × weight_kg`. At 75 kg, you prime with 75g of carbs 45–60 minutes before the session starts. Auto-populates from your profile.
 
 ---
 
 #### Cramping Susceptibility
-
-Toggle between **NO (Standard)** and **YES (Cramp Prone)**.
+Toggle between **NO (Standard)** and **YES (Cramp Prone)**. When set to YES, the baseline sodium target is increased by +200mg/hr.
 
 When set to YES:
 - An additional 200mg of sodium per hour is added to your baseline target.

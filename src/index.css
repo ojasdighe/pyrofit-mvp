@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --brand-rgb: 204 255 0;
+  --brand-rgb: 255 107 26;
   --brand: rgb(var(--brand-rgb));
   --strava: rgb(var(--brand-rgb));
-  --on-brand: #283500;
+  --on-brand: #000000;
   --bg: #080808;
   --carbon: #080808;
   --surface: #131313;
@@ -15,13 +15,13 @@
   --border: #262626;
   --border-bright: #333333;
   --fg: #ffffff;
-  --muted: rgba(255, 255, 255, 0.65);
-  --faint: rgba(255, 255, 255, 0.40);
+  --muted: rgba(255, 255, 255, 0.78);
+  --faint: rgba(255, 255, 255, 0.52);
   --glass-border: rgba(255, 255, 255, 0.08);
 }
 
 html.light {
-  --brand-rgb: 132 204 22;
+  --brand-rgb: 229 90 0;
   --brand: rgb(var(--brand-rgb));
   --strava: rgb(var(--brand-rgb));
   --on-brand: #ffffff;
@@ -39,7 +39,7 @@ html.light {
 }
 
 body {
-  background-color: var(--carbon);
+  background: radial-gradient(ellipse at top left, rgba(255,107,26,0.04) 0%, transparent 60%), var(--carbon);
   color: var(--fg);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
@@ -49,12 +49,23 @@ body {
   font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
   letter-spacing: -0.05em;
-  font-style: italic;
   font-weight: 800;
 }
 
 .font-space {
   font-family: 'Space Grotesk', monospace, sans-serif;
+}
+
+.brand-glow {
+  text-shadow: 0 0 20px rgba(255, 107, 26, 0.6), 0 0 40px rgba(255, 107, 26, 0.3);
+}
+
+.card-hover {
+  transition: box-shadow 0.2s;
+  box-shadow: none;
+}
+.card-hover:hover {
+  box-shadow: -3px 0 0 #FF6B1A;
 }
 
 /* Custom scrollbars */
@@ -70,7 +81,7 @@ body {
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--strava);
+  background: #FF6B1A;
 }
 
 @keyframes marquee {

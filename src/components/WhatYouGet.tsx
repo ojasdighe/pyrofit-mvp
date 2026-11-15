@@ -3,9 +3,11 @@ import { Flag, Gauge, Footprints, ArrowRight } from 'lucide-react';
 
 interface WhatYouGetProps {
   onOpenGenerator: (mode?: 'standard' | 'couch') => void;
+  onOpenEventCatalogue?: () => void;
+  onOpenCalculators?: () => void;
 }
 
-export const WhatYouGet: React.FC<WhatYouGetProps> = ({ onOpenGenerator }) => {
+export const WhatYouGet: React.FC<WhatYouGetProps> = ({ onOpenGenerator, onOpenEventCatalogue, onOpenCalculators }) => {
   return (
     <section className="py-24 px-8 md:px-20 border-t border-border bg-carbon">
       <div className="max-w-7xl mx-auto">
@@ -25,7 +27,7 @@ export const WhatYouGet: React.FC<WhatYouGetProps> = ({ onOpenGenerator }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1 */}
           <div
-            onClick={() => onOpenGenerator('standard')}
+            onClick={() => onOpenEventCatalogue ? onOpenEventCatalogue() : onOpenGenerator('standard')}
             className="cursor-pointer bg-surface border border-border p-8 group hover:border-strava/30 transition-all flex flex-col justify-between"
           >
             <div>
@@ -43,13 +45,13 @@ export const WhatYouGet: React.FC<WhatYouGetProps> = ({ onOpenGenerator }) => {
               </p>
             </div>
             <div className="mt-6 text-[10px] font-space text-strava tracking-widest uppercase flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              Launch generator <ArrowRight className="w-3.5 h-3.5" />
+              Browse events <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>
 
           {/* Card 2 */}
           <div
-            onClick={() => onOpenGenerator('standard')}
+            onClick={() => onOpenCalculators ? onOpenCalculators() : onOpenGenerator('standard')}
             className="cursor-pointer bg-surface border border-border p-8 group hover:border-strava/30 transition-all flex flex-col justify-between"
           >
             <div>
@@ -67,7 +69,7 @@ export const WhatYouGet: React.FC<WhatYouGetProps> = ({ onOpenGenerator }) => {
               </p>
             </div>
             <div className="mt-6 text-[10px] font-space text-strava tracking-widest uppercase flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              Explore zones <ArrowRight className="w-3.5 h-3.5" />
+              Open calculators <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>
 

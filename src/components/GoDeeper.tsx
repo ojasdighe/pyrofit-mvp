@@ -17,50 +17,69 @@ import {
 interface GoDeeperProps {
   onOpenCalculators: () => void;
   onOpenGenerator: (mode?: 'standard' | 'couch') => void;
+  onOpenFuelSchemes: () => void;
+  onOpenInjuries: () => void;
+  onOpenExercises: () => void;
+  onOpenSamplePlans: () => void;
+  onOpenEventCatalogue: () => void;
+  onOpenCompareMethods: () => void;
+  onOpenShoeComparisons: () => void;
+  onOpenWatchComparisons: () => void;
 }
 
-export const GoDeeper: React.FC<GoDeeperProps> = ({ onOpenCalculators, onOpenGenerator }) => {
+export const GoDeeper: React.FC<GoDeeperProps> = ({
+  onOpenCalculators,
+  onOpenGenerator,
+  onOpenFuelSchemes,
+  onOpenInjuries,
+  onOpenExercises,
+  onOpenSamplePlans,
+  onOpenEventCatalogue,
+  onOpenCompareMethods,
+  onOpenShoeComparisons,
+  onOpenWatchComparisons,
+}) => {
   const cards = [
     {
       icon: Zap,
       title: 'SAMPLE PLANS',
       desc: 'Curated plans across 10 methodologies plus the Absolute Beginner Blueprint. Load instantly.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenSamplePlans(),
       cta: 'Explore →',
     },
     {
       icon: Flag,
       title: 'EVENT CATALOGUE',
       desc: 'Berlin, Boston, Mumbai, Ladakh, UTMB. Course guides, BQ intel, travel specs.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenEventCatalogue(),
       cta: 'Explore →',
     },
     {
       icon: Utensils,
       title: 'NUTRITION',
       desc: 'Periodised carbs, 120g/hr fueling, hydration, RED-S, India-aware plant-based notes.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenFuelSchemes(),
       cta: 'Explore →',
     },
     {
       icon: CupSoda,
       title: 'FUEL COMPARE',
       desc: 'Gels, electrolytes, salt caps — carb-per-rupee and fructose ratios side-by-side.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenFuelSchemes(),
       cta: 'Explore →',
     },
     {
       icon: Plane,
       title: 'TRAVEL PLANNER',
       desc: 'Plan your Major — cost, charity entries, tour operators, flight windows.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenEventCatalogue(),
       cta: 'Explore →',
     },
     {
       icon: Dumbbell,
       title: 'EXERCISES',
       desc: 'Strength, mobility, drills. Search by muscle group and difficulty.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenExercises(),
       cta: 'Explore →',
     },
     {
@@ -74,28 +93,28 @@ export const GoDeeper: React.FC<GoDeeperProps> = ({ onOpenCalculators, onOpenGen
       icon: HeartPulse,
       title: 'INJURY PREVENTION',
       desc: "Runner's knee, IT band, plantar fasciitis. Cause, treatment, return protocols.",
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenInjuries(),
       cta: 'Explore →',
     },
     {
       icon: GitCompare,
       title: 'COMPARE METHODS',
       desc: 'Daniels vs Lydiard. Hansons vs Galloway. Find the system that fits your goals.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenCompareMethods(),
       cta: 'Explore →',
     },
     {
       icon: Layers,
       title: 'SHOE COMPARISONS',
       desc: 'Carbon-plate super-shoes vs daily trainers — stack, drop, weight and price, head-to-head.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenShoeComparisons(),
       cta: 'Compare →',
     },
     {
       icon: Watch,
       title: 'WATCH COMPARISONS',
       desc: 'GPS running watches compared on battery life, accuracy, training metrics and value.',
-      action: () => onOpenGenerator('standard'),
+      action: () => onOpenWatchComparisons(),
       cta: 'Compare →',
     },
   ];

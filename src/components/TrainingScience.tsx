@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
 export const TrainingScience: React.FC = () => {
@@ -19,7 +19,7 @@ export const TrainingScience: React.FC = () => {
 
         <div className="flex-1 md:max-w-md">
           <p className="text-muted text-base md:text-lg leading-relaxed font-light mb-8">
-            Most runners train hard. Few train <em className="text-fg font-normal not-italic">right</em>. STRIDD assigns a precise physiological purpose to each session — aerobic base, lactate threshold, VO₂max, neuromuscular power.
+            Most runners train hard. Few train <em className="text-fg font-normal not-italic">right</em>. PYROFIT assigns a precise physiological purpose to each session — aerobic base, lactate threshold, VO₂max, neuromuscular power.
           </p>
           <a
             href="#four-levers"

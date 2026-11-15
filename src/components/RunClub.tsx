@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Footprints, Megaphone, Users } from 'lucide-react';
 
 export const RunClub: React.FC = () => {
@@ -18,7 +18,7 @@ export const RunClub: React.FC = () => {
               <span className="text-faint">PACK.</span>
             </h2>
             <p className="text-muted text-base font-light leading-relaxed mb-6 max-w-md">
-              The STRIDD run club is where the plans meet the pavement. Weekly group runs, race-day meetups, and a crew that actually shows up.
+              The PYROFIT run club is where the plans meet the pavement. Weekly group runs, race-day meetups, and a crew that actually shows up.
             </p>
 
             <ul className="space-y-3 mb-8">
@@ -45,7 +45,7 @@ export const RunClub: React.FC = () => {
               <svg className="w-5 h-5 fill-current relative z-10" viewBox="0 0 24 24">
                 <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
               </svg>
-              <span className="relative z-10 font-bold">JOIN STRIDD RUN CLUB</span>
+              <span className="relative z-10 font-bold">JOIN PYROFIT RUN CLUB</span>
               <div className="absolute inset-0 bg-white/20 translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
             </a>
           </div>

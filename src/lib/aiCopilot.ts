@@ -1,7 +1,6 @@
 /**
  * Pyrofit AI Sports Nutritionist & Copilot Service
- * Powered by FreeLLMAPI at http://localhost:3001/v1
- * Key: freellmapi-764e617a1de0fe333524b98de87ef1218cbb3b29681d7550
+ * Supports: OpenAI, Anthropic, Google Gemini, Mistral, FreeLLMAPI, or any OpenAI-compatible API
  */
 
 import {
@@ -10,6 +9,7 @@ import {
   PhaseStrategyPlan,
   WorkoutInputVector,
 } from '../types/pyrofit';
+import { aiConfigManager, type AIProvider } from './aiConfig';
 
 // Minimal interface for the phase plan fields we actually reference
 interface PhasePlanSummary {
@@ -29,56 +29,180 @@ export interface ChatMessage {
   timestamp: string;
 }
 
-const API_KEY = 'freellmapi-764e617a1de0fe333524b98de87ef1218cbb3b29681d7550';
-// In Vite dev server, /v1 is proxied to http://localhost:3001/v1. Fallback directly to localhost:3001 if needed.
-const ENDPOINTS = [
-  '/v1/chat/completions',
-  'http://localhost:3001/v1/chat/completions',
-];
-
 /**
- * Low-level completion caller with retry & endpoint fallback
+ * Universal AI completion caller supporting multiple providers
+ * Works with OpenAI, Anthropic, Gemini, Mistral, FreeLLM, or any OpenAI-compatible API
  */
-export async function callFreeLLMAPI(
+export async function callAI(
   messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
   maxTokens: number = 600
 ): Promise<string> {
-  let lastError: any = null;
-
-  for (const endpoint of ENDPOINTS) {
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'auto',
-          messages,
-          max_tokens: maxTokens,
-          temperature: 0.7,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`FreeLLMAPI responded with status ${response.status}`);
-      }
-
-      const data = await response.json();
-      const content = data.choices?.[0]?.message?.content;
-      if (content && typeof content === 'string') {
-        return content.trim();
-      }
-    } catch (err) {
-      lastError = err;
-      // continue to next endpoint
-    }
+  const config = aiConfigManager.getConfig();
+  
+  if (!config.apiKey || !config.baseURL) {
+    console.warn('AI provider not configured, using scientific fallback');
+    return getFallbackScientificResponse(messages);
   }
 
-  // If both endpoints failed (e.g. running outside of server or port mismatch), provide a sports science fallback
-  console.warn('FreeLLMAPI endpoint unreachable, using scientific fallback:', lastError);
-  return getFallbackScientificResponse(messages);
+  try {
+    // Handle Anthropic's different API format
+    if (config.provider === 'anthropic') {
+      return await callAnthropicAPI(messages, maxTokens, config);
+    }
+    
+    // Handle Gemini's different API format
+    if (config.provider === 'gemini') {
+      return await callGeminiAPI(messages, maxTokens, config);
+    }
+    
+    // OpenAI-compatible format (works for OpenAI, Mistral, FreeLLM, and most others)
+    return await callOpenAICompatibleAPI(messages, maxTokens, config);
+  } catch (err) {
+    console.warn('AI API call failed, using scientific fallback:', err);
+    return getFallbackScientificResponse(messages);
+  }
+}
+
+/**
+ * Call OpenAI-compatible APIs (OpenAI, Mistral, FreeLLM, etc.)
+ */
+async function callOpenAICompatibleAPI(
+  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
+  maxTokens: number,
+  config: any
+): Promise<string> {
+  const endpoint = `${config.baseURL.replace(/\/$/, '')}/chat/completions`;
+  
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${config.apiKey}`,
+    },
+    body: JSON.stringify({
+      model: config.model,
+      messages,
+      max_tokens: maxTokens,
+      temperature: 0.7,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => 'Unknown error');
+    throw new Error(`API responded with status ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content;
+  
+  if (content && typeof content === 'string') {
+    return content.trim();
+  }
+  
+  throw new Error('Invalid API response format');
+}
+
+/**
+ * Call Anthropic Claude API (different format)
+ */
+async function callAnthropicAPI(
+  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
+  maxTokens: number,
+  config: any
+): Promise<string> {
+  // Anthropic uses a different format: system message separate, and different endpoint
+  const systemMessage = messages.find(m => m.role === 'system')?.content || '';
+  const conversationMessages = messages
+    .filter(m => m.role !== 'system')
+    .map(m => ({ role: m.role, content: m.content }));
+
+  const endpoint = `${config.baseURL.replace(/\/$/, '')}/messages`;
+  
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': config.apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: config.model,
+      max_tokens: maxTokens,
+      system: systemMessage,
+      messages: conversationMessages,
+      temperature: 0.7,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => 'Unknown error');
+    throw new Error(`Anthropic API responded with status ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  const content = data.content?.[0]?.text;
+  
+  if (content && typeof content === 'string') {
+    return content.trim();
+  }
+  
+  throw new Error('Invalid Anthropic API response format');
+}
+
+/**
+ * Call Google Gemini API (different format)
+ */
+async function callGeminiAPI(
+  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
+  maxTokens: number,
+  config: any
+): Promise<string> {
+  // Gemini uses a different message format
+  const systemInstructions = messages.find(m => m.role === 'system')?.content || '';
+  const conversationParts = messages
+    .filter(m => m.role !== 'system')
+    .map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    }));
+
+  const endpoint = `${config.baseURL.replace(/\/$/, '')}/models/${config.model}:generateContent?key=${config.apiKey}`;
+  
+  const requestBody: any = {
+    contents: conversationParts,
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: maxTokens,
+    },
+  };
+
+  if (systemInstructions) {
+    requestBody.systemInstruction = {
+      parts: [{ text: systemInstructions }],
+    };
+  }
+
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => 'Unknown error');
+    throw new Error(`Gemini API responded with status ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  
+  if (content && typeof content === 'string') {
+    return content.trim();
+  }
+  
+  throw new Error('Invalid Gemini API response format');
 }
 
 /**
@@ -136,7 +260,7 @@ Explain:
 2. The exact timing rhythm (pre-load, during intervals, post-recovery).
 3. Gut-comfort guidelines to maintain gastric emptying speed.`;
 
-  return callFreeLLMAPI([
+  return callAI([
     { role: 'system', content: systemPrompt },
     { role: 'user', content: userPrompt },
   ], 800);
@@ -173,7 +297,7 @@ Explain:
   }) will prevent this on future runs.
 3. One concrete tip for their next training session.`;
 
-  return callFreeLLMAPI([
+  return callAI([
     { role: 'system', content: systemPrompt },
     { role: 'user', content: userPrompt },
   ], 600);
@@ -214,7 +338,7 @@ Provide scientifically grounded, actionable advice. Reference actual sports scie
 
   messages.push({ role: 'user', content: question });
 
-  return callFreeLLMAPI(messages, 700);
+  return callAI(messages, 700);
 }
 
 /**

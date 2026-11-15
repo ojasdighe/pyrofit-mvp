@@ -3,9 +3,10 @@ import { Layers, GitCompare, Award, ArrowRight } from 'lucide-react';
 
 interface RunningLabProps {
   onOpenGenerator: () => void;
+  onOpenComparisons?: () => void;
 }
 
-export const RunningLab: React.FC<RunningLabProps> = ({ onOpenGenerator }) => {
+export const RunningLab: React.FC<RunningLabProps> = ({ onOpenGenerator, onOpenComparisons }) => {
   return (
     <section id="running-lab" className="py-24 px-8 md:px-20 border-t border-border bg-bg/30">
       <div className="max-w-7xl mx-auto">
@@ -34,7 +35,7 @@ export const RunningLab: React.FC<RunningLabProps> = ({ onOpenGenerator }) => {
 
           <div className="grid grid-cols-1 gap-3">
             <div
-              onClick={onOpenGenerator}
+              onClick={() => onOpenComparisons ? onOpenComparisons() : onOpenGenerator()}
               className="cursor-pointer bg-surface border border-border p-5 group hover:border-strava/30 transition-all flex items-center gap-4"
             >
               <div className="w-10 h-10 rounded-sm bg-strava/10 flex items-center justify-center text-strava group-hover:scale-110 transition-transform">
@@ -52,7 +53,7 @@ export const RunningLab: React.FC<RunningLabProps> = ({ onOpenGenerator }) => {
             </div>
 
             <div
-              onClick={onOpenGenerator}
+              onClick={() => onOpenComparisons ? onOpenComparisons() : onOpenGenerator()}
               className="cursor-pointer bg-surface border border-border p-5 group hover:border-strava/30 transition-all flex items-center gap-4"
             >
               <div className="w-10 h-10 rounded-sm bg-strava/10 flex items-center justify-center text-strava group-hover:scale-110 transition-transform">
@@ -70,7 +71,7 @@ export const RunningLab: React.FC<RunningLabProps> = ({ onOpenGenerator }) => {
             </div>
 
             <div
-              onClick={onOpenGenerator}
+              onClick={() => onOpenComparisons ? onOpenComparisons() : onOpenGenerator()}
               className="cursor-pointer bg-surface border border-border p-5 group hover:border-strava/30 transition-all flex items-center gap-4"
             >
               <div className="w-10 h-10 rounded-sm bg-strava/10 flex items-center justify-center text-strava group-hover:scale-110 transition-transform">

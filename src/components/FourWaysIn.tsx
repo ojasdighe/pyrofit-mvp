@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Flag, Footprints, Activity, PauseCircle, ArrowRight } from 'lucide-react';
 
 interface FourWaysInProps {
@@ -13,7 +13,7 @@ export const FourWaysIn: React.FC<FourWaysInProps> = ({ onOpenGenerator, onOpenC
         <div className="flex items-baseline justify-between gap-4 flex-wrap mb-10">
           <div>
             <div className="text-strava font-space text-[9px] tracking-[0.6em] uppercase mb-2">
-              How runners use STRIDD
+              How runners use PYROFIT
             </div>
             <h2
               className="italic-heavy leading-[0.88] tracking-tighter"

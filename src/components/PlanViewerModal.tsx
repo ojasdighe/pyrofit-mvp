@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { X, Calendar, Download, Printer, ChevronRight, Activity, Info, ShieldAlert } from 'lucide-react';
 import { DayWorkout, GeneratedPlan } from '../types/architect';
 
@@ -33,7 +33,7 @@ export const PlanViewerModal: React.FC<PlanViewerModalProps> = ({ plan, isOpen, 
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `STRIDD_${plan.distance}_${plan.methodology.name.replace(/ /g, '_')}_Plan.csv`;
+    link.download = `PYROFIT_${plan.distance}_${plan.methodology.name.replace(/ /g, '_')}_Plan.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -49,7 +49,7 @@ export const PlanViewerModal: React.FC<PlanViewerModalProps> = ({ plan, isOpen, 
         <div className="flex items-center justify-between pb-5 border-b border-border">
           <div className="flex items-center gap-4 flex-wrap">
             <div className="italic-heavy text-2xl text-fg">
-              STRIDD <span className="text-strava">BLUEPRINT</span>
+              PYROFIT <span className="text-strava">BLUEPRINT</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="font-space text-[10px] tracking-widest uppercase bg-strava/10 border border-strava/30 text-strava px-2.5 py-1 font-bold">
