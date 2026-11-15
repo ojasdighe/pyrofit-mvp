@@ -15,5 +15,6 @@ export default defineConfig({
   },
   preview: {
     allowedHosts: ['pyrofit-mvp.onrender.com'],
+    port: process.env.PORT ? parseInt(process.env.PORT) : 4173,
   },
 });
