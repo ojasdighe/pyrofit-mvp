@@ -38,7 +38,7 @@ import { AICopilotDrawer } from './AICopilotDrawer';
 import { LiveFuelingTimer } from './LiveFuelingTimer';
 import { CustomFuelStackBuilder } from './CustomFuelStackBuilder';
 import { RaceSimulator } from './RaceSimulator';
-import { AthleteProfileView, computeProfileCompleteness } from './AthleteProfileView';
+import { AthleteProfileView, computeProfileCompleteness, getMissingProfileFields } from './AthleteProfileView';
 import { ProductCompareView } from './ProductCompareView';
 import { FeedbackView } from './FeedbackView';
 
@@ -68,6 +68,15 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
       if (raw) return JSON.parse(raw) as FullAthleteProfile;
     } catch {}
     return null;
+  });
+
+  // ── Has calculated at least once ─────────────────────────────────────────
+  const [hasCalculated, setHasCalculated] = useState<boolean>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('pyrofit_has_calculated') ?? 'false');
+    } catch {
+      return false;
+    }
   });
 
   // ── Active view: default to 'profile' when no profile exists ─────────────
@@ -147,6 +156,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
 
   // ── Profile completeness badge ────────────────────────────────────────────
   const completeness = fullProfile ? computeProfileCompleteness(fullProfile) : 0;
+  const missingFields = fullProfile ? getMissingProfileFields(fullProfile) : [];
   const pillColor =
     completeness >= 80
       ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
@@ -218,6 +228,8 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
     });
     setRecentSessions(sqliteEngine.getWorkoutSessions(5));
     setPlannerScreen('strategy');
+    setHasCalculated(true);
+    localStorage.setItem('pyrofit_has_calculated', 'true');
   };
 
   const handleLoadSession = (sess: Record<string, any>) => {
@@ -279,50 +291,103 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
         </div>
       )}
 
-      {/* Feature Launcher Bar */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <button
-          onClick={() => setAiCopilotOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 border border-strava/50 bg-strava/10 hover:bg-strava/20 text-strava text-[11px] font-space font-bold uppercase tracking-wider transition-all"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          AI Sports Scientist
-        </button>
-        <button
-          onClick={() => {
-            if (activeView !== 'planner') setActiveView('planner');
-            setPlannerScreen('strategy');
-            setTimeout(() => setLiveTimerOpen(true), 100);
-          }}
-          className="flex items-center gap-1.5 px-3 py-2 border border-sky-500/50 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
-        >
-          <Timer className="w-3.5 h-3.5" />
-          Live Fueling Timer
-        </button>
-        <button
-          onClick={() => setStackBuilderOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
-        >
-          <ShoppingCart className="w-3.5 h-3.5" />
-          Custom Fuel Stack
-        </button>
-        <button
-          onClick={() => setRaceSimOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 border border-strava/50 bg-strava/10 hover:bg-strava/20 text-strava text-[11px] font-space font-bold uppercase tracking-wider transition-all"
-        >
-          <Gauge className="w-3.5 h-3.5" />
-          Race Simulator
-        </button>
-        <button
-          onClick={() => setFeedbackModalOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 border border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          Post-Workout Survey
-        </button>
-      </div>
+      {/* First-open welcome card OR normal flow */}
+      {!fullProfile ? (
+        <div className="mb-8 p-8 bg-strava/5 border-2 border-strava/40 text-center space-y-5">
+          <div className="text-strava font-space text-[10px] tracking-[0.5em] uppercase font-bold flex items-center justify-center gap-2">
+            <Flame className="w-4 h-4" /> WELCOME TO PYROFIT
+          </div>
+          <h2 className="italic-heavy text-3xl text-fg">Set up in <span className="text-strava">60 seconds</span></h2>
+          <p className="text-muted text-sm font-light max-w-lg mx-auto">
+            Tell us about yourself and we'll calculate exact carb, sodium, and fluid targets personalised to your body and training load.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto text-left">
+            <div className="p-3 bg-surface border border-border">
+              <div className="text-strava font-space text-[10px] font-bold uppercase tracking-wider mb-1">Step 1</div>
+              <div className="text-fg text-xs font-space">Fill in your Athlete Profile (sport, weight, goals)</div>
+            </div>
+            <div className="p-3 bg-surface border border-border">
+              <div className="text-strava font-space text-[10px] font-bold uppercase tracking-wider mb-1">Step 2</div>
+              <div className="text-fg text-xs font-space">Configure your session (duration, intensity, temp)</div>
+            </div>
+            <div className="p-3 bg-surface border border-border">
+              <div className="text-strava font-space text-[10px] font-bold uppercase tracking-wider mb-1">Step 3</div>
+              <div className="text-fg text-xs font-space">Get exact targets + product recommendations</div>
+            </div>
+          </div>
+          <button
+            onClick={() => setActiveView('profile')}
+            className="bg-strava text-on-brand italic-heavy px-10 py-4 text-base font-black uppercase tracking-wider hover:bg-white transition-colors shadow-[0_12px_40px_rgba(255,107,26,0.3)]"
+          >
+            START: BUILD YOUR PROFILE →
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* Feature Launcher Bar */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {hasCalculated ? (
+              <>
+                <button
+                  onClick={() => setAiCopilotOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 border border-strava/50 bg-strava/10 hover:bg-strava/20 text-strava text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  AI Sports Scientist
+                </button>
+                <button
+                  onClick={() => {
+                    if (activeView !== 'planner') setActiveView('planner');
+                    setPlannerScreen('strategy');
+                    setTimeout(() => setLiveTimerOpen(true), 100);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-2 border border-sky-500/50 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+                >
+                  <Timer className="w-3.5 h-3.5" />
+                  Live Fueling Timer
+                </button>
+                <button
+                  onClick={() => setStackBuilderOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+                >
+                  <ShoppingCart className="w-3.5 h-3.5" />
+                  Custom Fuel Stack
+                </button>
+                <button
+                  onClick={() => setRaceSimOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 border border-strava/50 bg-strava/10 hover:bg-strava/20 text-strava text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+                >
+                  <Gauge className="w-3.5 h-3.5" />
+                  Race Simulator
+                </button>
+                <button
+                  onClick={() => setFeedbackModalOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 border border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 text-[11px] font-space font-bold uppercase tracking-wider transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  Post-Workout Survey
+                </button>
+              </>
+            ) : (
+              <div className="flex items-center gap-3 mb-6 px-4 py-3 bg-surface border border-border w-full">
+                <Sliders className="w-4 h-4 text-strava shrink-0" />
+                <span className="text-xs font-space text-muted">
+                  <span className="text-fg font-bold">Calculate your first session</span> to unlock AI Sports Scientist, Live Timer, Custom Fuel Stack, Race Simulator, and Post-Workout Survey.
+                </span>
+                <button
+                  onClick={() => setActiveView('planner')}
+                  className="ml-auto shrink-0 px-4 py-2 bg-strava text-on-brand text-[11px] font-space font-bold uppercase tracking-wider hover:bg-white transition-colors"
+                >
+                  Session Planner →
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
-      {/* 5-Tab Navigation */}
+      {/* 5-Tab Navigation — only shown when profile exists */}
+      {fullProfile && (
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 p-1.5 bg-surface border border-border mb-8">
         {/* Profile tab */}
         <button
@@ -338,6 +403,7 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
           {completeness > 0 && (
             <span
               className={`ml-1 px-1.5 py-0.5 text-[9px] border font-bold rounded-sm ${pillColor}`}
+              title={missingFields.length > 0 ? `Missing: ${missingFields.slice(0, 5).join(', ')}` : 'Profile complete'}
             >
               {completeness}%
             </span>
@@ -393,9 +459,10 @@ export const PyrofitHub: React.FC<PyrofitHubProps> = () => {
           }`}
         >
           <BarChart3 className="w-3.5 h-3.5 shrink-0" />
-          <span>B2B Analytics</span>
+          <span>History &amp; Data</span>
         </button>
       </div>
+      )}
 
       {/* ── View Content ─────────────────────────────────────────────────────── */}
 

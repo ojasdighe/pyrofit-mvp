@@ -9,6 +9,8 @@ import {
   ArrowRight,
   Sliders,
   Loader2,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { IntensityLevel, ProductTier, WorkoutInputVector } from '../../types/pyrofit';
 import { getTemperatureClimateLabel } from '../../lib/fuelEngine';
@@ -35,6 +37,9 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
   const [weatherResult, setWeatherResult] = useState<WeatherResult | null>(null);
   const [weatherError, setWeatherError] = useState<string | null>(null);
   const [wetBulbC, setWetBulbC] = useState<number | null>(null);
+
+  // Advanced options toggle
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   const setField = <K extends keyof WorkoutInputVector>(key: K, val: WorkoutInputVector[K]) => {
     onChange({ ...input, [key]: val });
@@ -84,7 +89,7 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
 
         {filterIsotonicOnly && (
           <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FF9800]/10 border border-[#FF9800]/40 text-[#FF9800] text-[11px] font-space font-bold uppercase rounded-sm">
-            <ShieldAlert className="w-3.5 h-3.5" /> Gut-Safe Filter Active (Hydrogel / Isotonic Only)
+            <ShieldAlert className="w-3.5 h-3.5" /> Gut-Safe Filter On — only easy-to-digest products shown
           </div>
         )}
       </div>
@@ -95,6 +100,7 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
           <div className="flex items-center justify-between mb-2">
             <label className="text-xs font-space tracking-wider uppercase text-strava font-bold flex items-center gap-2">
               <Sliders className="w-3.5 h-3.5" /> Workout Duration (Minutes): {input.workout_duration_mins} mins
+              <span className="ml-2 px-1.5 py-0.5 text-[9px] font-space uppercase tracking-wider border border-strava/40 bg-strava/10 text-strava">Required</span>
             </label>
             <span className="font-space text-sm font-bold text-fg">
               {(input.workout_duration_mins / 60).toFixed(1)} hrs
@@ -123,12 +129,13 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
         <div>
           <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2 flex items-center gap-2">
             <Activity className="w-3.5 h-3.5" /> Training Intensity Level
+            <span className="ml-2 px-1.5 py-0.5 text-[9px] font-space uppercase tracking-wider border border-strava/40 bg-strava/10 text-strava">Required</span>
           </label>
           <div className="grid grid-cols-3 gap-3">
             {[
-              { id: 'LOW', label: 'LOW INTENSITY', zone: 'Zone 1–2 Aerobic Base', factor: '0.8x burn' },
-              { id: 'MID', label: 'MID INTENSITY', zone: 'Zone 3 Tempo / Marathon', factor: '1.0x baseline' },
-              { id: 'HIGH', label: 'HIGH INTENSITY', zone: 'Zone 4–5 Threshold / Intervals', factor: '1.2x burn' },
+              { id: 'LOW', label: 'LOW INTENSITY', zone: 'Zone 1–2 Aerobic Base', factor: 'Lower carb burn rate' },
+              { id: 'MID', label: 'MID INTENSITY', zone: 'Zone 3 Tempo / Marathon', factor: 'Standard burn rate' },
+              { id: 'HIGH', label: 'HIGH INTENSITY', zone: 'Zone 4–5 Threshold / Intervals', factor: 'Higher carb burn rate' },
             ].map((item) => {
               const active = input.intensity_level === item.id;
               return (
@@ -158,6 +165,7 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
           <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
             <label className="text-xs font-space tracking-wider uppercase text-strava font-bold flex items-center gap-2">
               <Thermometer className="w-3.5 h-3.5" /> Ambient Temperature (°C)
+              <span className="ml-2 px-1.5 py-0.5 text-[9px] font-space uppercase tracking-wider border border-strava/40 bg-strava/10 text-strava">Required</span>
             </label>
             <span className={`text-[10px] font-space px-2.5 py-1 border font-bold uppercase ${climate.badgeColor}`}>
               {climate.label}
@@ -184,248 +192,268 @@ export const WorkoutConfigurator: React.FC<WorkoutConfiguratorProps> = ({
             </div>
 
             <div className="text-[11px] font-space text-muted leading-relaxed">
-              {input.temperature_celsius < 22 && 'Standard baseline sweat rate. Fluid loss ~500 ml/hr.'}
-              {input.temperature_celsius >= 22 && input.temperature_celsius <= 30 && 'Moderate thermoregulatory demand. Sodium burn escalates by +20%.'}
-              {input.temperature_celsius > 30 && 'Severe heat stress. Sodium requirement surges +40% with high sweat electrolyte dissipation.'}
+              {input.temperature_celsius < 22 && 'Cool conditions — standard fluid needs (~500 ml/hr).'}
+              {input.temperature_celsius >= 22 && input.temperature_celsius <= 30 && 'Moderate heat — sodium needs increase by about 20%.'}
+              {input.temperature_celsius > 30 && 'High heat — sodium needs increase by ~40%. Stay alert to dehydration.'}
             </div>
           </div>
         </div>
 
-        {/* Live Weather */}
-        <div className="p-4 bg-surface border border-border space-y-3">
-          <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold flex items-center gap-2">
-            <Thermometer className="w-3.5 h-3.5" /> Live Weather Fetch
-          </label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={weatherCity}
-              onChange={(e) => setWeatherCity(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter' && weatherCity.trim() && !isWeatherLoading) handleFetchWeather(); }}
-              placeholder="City name, e.g. Pune"
-              className="flex-1 bg-carbon border border-border px-4 py-2 text-fg font-space text-sm focus:border-strava outline-none"
-            />
-            <button
-              type="button"
-              onClick={handleFetchWeather}
-              disabled={!weatherCity.trim() || isWeatherLoading}
-              className="px-4 py-2 border border-strava bg-strava/10 hover:bg-strava/20 text-strava text-xs font-space font-bold uppercase tracking-wider transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
-            >
-              {isWeatherLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
-              {isWeatherLoading ? 'Fetching...' : 'Fetch Live Weather'}
-            </button>
-          </div>
-          {weatherResult && (
-            <div className="px-3 py-2 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 text-xs font-space font-bold flex flex-wrap items-center gap-2">
-              🌤 {weatherResult.city_name} · {weatherResult.temperature_c}°C · {weatherResult.humidity_pct}% RH · Wet-bulb {weatherResult.wet_bulb_c}°C
-            </div>
-          )}
-          {weatherResult && wetBulbC !== null && wetBulbC > 28 && (
-            <div className="px-3 py-2 bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs font-space">
-              ⚠ High wet-bulb temperature ({wetBulbC}°C) — evaporative cooling is impaired. Sodium targets are automatically elevated.
-            </div>
-          )}
-          {weatherError && (
-            <div className="px-3 py-2 bg-red-500/10 border border-red-500/40 text-red-400 text-xs font-space">
-              {weatherError}
-            </div>
-          )}
-        </div>
+        {/* Live Weather — moved to Advanced Options below */}
+      </div>
 
-        {/* 4. Athlete Weight & Cramping History Switch */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 bg-surface border border-border">
-            <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2 flex items-center gap-2">
-              <Scale className="w-3.5 h-3.5" /> Athlete Body Weight (kg)
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                type="number"
-                value={input.athlete_weight_kg}
-                onChange={(e) => setField('athlete_weight_kg', parseFloat(e.target.value) || 70)}
-                step="1"
-                min="35"
-                max="140"
-                className="bg-carbon border border-border px-4 py-2 text-fg font-space text-base font-bold w-28 focus:border-strava outline-none"
-              />
-              <span className="text-xs font-space text-faint">Used for 1.0g/kg Pre-Workout Carb Priming</span>
-            </div>
-          </div>
-
-          <div className="p-4 bg-surface border border-border flex items-center justify-between">
-            <div>
-              <div className="text-xs font-space tracking-wider uppercase text-strava font-bold flex items-center gap-2">
-                <Zap className="w-3.5 h-3.5" /> Cramping Susceptibility
-              </div>
-              <div className="text-[10px] text-faint mt-1">
-                Adds +200mg sodium/hr baseline protection
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setField('cramping_history', !input.cramping_history)}
-              className={`px-4 py-2 text-xs font-space font-bold uppercase transition-all border ${
-                input.cramping_history
-                  ? 'border-strava bg-strava text-on-brand'
-                  : 'border-border bg-carbon text-muted hover:text-fg'
-              }`}
-            >
-              {input.cramping_history ? 'YES (CRAMP PRONE)' : 'NO (STANDARD)'}
-            </button>
-          </div>
-        </div>
-
-        {/* 5. Product Budget Tier Selector */}
-        <div>
-          <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
-            Preferred Product Formulation Tier
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {[
-              { id: 'ALL', label: 'ALL TIERS', desc: 'Maurten, Unived, Fast&Up, Enerzal' },
-              { id: 'L1', label: 'L1: PREMIUM SCIENTIFIC', desc: 'Maurten Hydrogel & Unived Elite' },
-              { id: 'L2', label: 'L2: BALANCED PERFORMANCE', desc: 'Fast&Up Gels & Reload' },
-              { id: 'L3', label: 'L3: VALUE ESSENTIAL', desc: 'Enerzal Isotonic Solutions' },
-            ].map((t) => {
-              const active = input.budget_tier_preference === t.id;
-              return (
+      {/* Advanced Options collapsible (fields 4–9 + Live Weather) */}
+      <div className="border border-border">
+        <button
+          type="button"
+          onClick={() => setAdvancedOpen(!advancedOpen)}
+          className="w-full flex items-center justify-between px-4 py-3 text-xs font-space font-bold uppercase tracking-wider text-muted hover:text-fg transition-colors"
+        >
+          <span>Advanced Options</span>
+          <span className="flex items-center gap-1.5">
+            <span className="text-faint font-normal normal-case tracking-normal">{advancedOpen ? 'Hide' : 'Show optional fields'}</span>
+            {advancedOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </span>
+        </button>
+        {advancedOpen && (
+          <div className="border-t border-border p-4 md:p-6 space-y-6">
+            {/* Live Weather */}
+            <div className="p-4 bg-surface border border-border space-y-3">
+              <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold flex items-center gap-2">
+                <Thermometer className="w-3.5 h-3.5" /> Live Weather Fetch
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={weatherCity}
+                  onChange={(e) => setWeatherCity(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && weatherCity.trim() && !isWeatherLoading) handleFetchWeather(); }}
+                  placeholder="City name, e.g. Pune"
+                  className="flex-1 bg-carbon border border-border px-4 py-2 text-fg font-space text-sm focus:border-strava outline-none"
+                />
                 <button
-                  key={t.id}
                   type="button"
-                  onClick={() => setField('budget_tier_preference', t.id as ProductTier)}
-                  className={`p-3 text-left border text-xs font-space transition-all ${
-                    active
-                      ? 'border-strava bg-strava/15 text-fg font-bold'
-                      : 'border-border bg-surface text-muted hover:text-fg'
+                  onClick={handleFetchWeather}
+                  disabled={!weatherCity.trim() || isWeatherLoading}
+                  className="px-4 py-2 border border-strava bg-strava/10 hover:bg-strava/20 text-strava text-xs font-space font-bold uppercase tracking-wider transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
+                >
+                  {isWeatherLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
+                  {isWeatherLoading ? 'Fetching...' : 'Fetch Live Weather'}
+                </button>
+              </div>
+              {weatherResult && (
+                <div className="px-3 py-2 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 text-xs font-space font-bold flex flex-wrap items-center gap-2">
+                  🌤 {weatherResult.city_name} · {weatherResult.temperature_c}°C · {weatherResult.humidity_pct}% RH · Wet-bulb {weatherResult.wet_bulb_c}°C
+                </div>
+              )}
+              {weatherResult && wetBulbC !== null && wetBulbC > 28 && (
+                <div className="px-3 py-2 bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs font-space">
+                  ⚠ High wet-bulb temperature ({wetBulbC}°C) — evaporative cooling is impaired. Sodium targets are automatically elevated.
+                </div>
+              )}
+              {weatherError && (
+                <div className="px-3 py-2 bg-red-500/10 border border-red-500/40 text-red-400 text-xs font-space">
+                  {weatherError}
+                </div>
+              )}
+            </div>
+
+            {/* 4. Athlete Weight & Cramping History Switch */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 bg-surface border border-border">
+                <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2 flex items-center gap-2">
+                  <Scale className="w-3.5 h-3.5" /> Athlete Body Weight (kg)
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="number"
+                    value={input.athlete_weight_kg}
+                    onChange={(e) => setField('athlete_weight_kg', parseFloat(e.target.value) || 70)}
+                    step="1"
+                    min="35"
+                    max="140"
+                    className="bg-carbon border border-border px-4 py-2 text-fg font-space text-base font-bold w-28 focus:border-strava outline-none"
+                  />
+                  <span className="text-xs font-space text-faint">Used for 1.0g/kg Pre-Workout Carb Priming</span>
+                </div>
+              </div>
+
+              <div className="p-4 bg-surface border border-border flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-space tracking-wider uppercase text-strava font-bold flex items-center gap-2">
+                    <Zap className="w-3.5 h-3.5" /> Cramping Susceptibility
+                  </div>
+                  <div className="text-[10px] text-faint mt-1">
+                    Adds +200mg sodium/hr baseline protection
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setField('cramping_history', !input.cramping_history)}
+                  className={`px-4 py-2 text-xs font-space font-bold uppercase transition-all border ${
+                    input.cramping_history
+                      ? 'border-strava bg-strava text-on-brand'
+                      : 'border-border bg-carbon text-muted hover:text-fg'
                   }`}
                 >
-                  <div className="font-bold">{t.label}</div>
-                  <div className="text-[9px] text-faint mt-1 line-clamp-1">{t.desc}</div>
+                  {input.cramping_history ? 'YES (CRAMP PRONE)' : 'NO (STANDARD)'}
                 </button>
-              );
-            })}
+              </div>
+            </div>
+
+            {/* 5. Product Budget Tier Selector */}
+            <div>
+              <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+                Preferred Product Formulation Tier
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { id: 'ALL', label: 'ALL TIERS', desc: 'Maurten, Unived, Fast&Up, Enerzal' },
+                  { id: 'L1', label: 'L1: PREMIUM SCIENTIFIC', desc: 'Maurten Hydrogel & Unived Elite' },
+                  { id: 'L2', label: 'L2: BALANCED PERFORMANCE', desc: 'Fast&Up Gels & Reload' },
+                  { id: 'L3', label: 'L3: VALUE ESSENTIAL', desc: 'Enerzal Isotonic Solutions' },
+                ].map((t) => {
+                  const active = input.budget_tier_preference === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => setField('budget_tier_preference', t.id as ProductTier)}
+                      className={`p-3 text-left border text-xs font-space transition-all ${
+                        active
+                          ? 'border-strava bg-strava/15 text-fg font-bold'
+                          : 'border-border bg-surface text-muted hover:text-fg'
+                      }`}
+                    >
+                      <div className="font-bold">{t.label}</div>
+                      <div className="text-[9px] text-faint mt-1 line-clamp-1">{t.desc}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 6. Session Type */}
+            <div>
+              <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+                Session Type
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {(['Training', 'Race', 'Long Run', 'Recovery'] as const).map((t) => {
+                  const active = (input.session_type ?? 'Training') === t;
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setField('session_type', t)}
+                      className={`p-3 text-left border text-xs font-space transition-all ${
+                        active
+                          ? 'border-strava bg-strava/15 text-fg font-bold'
+                          : 'border-border bg-surface text-muted hover:text-fg'
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 7. Terrain */}
+            <div>
+              <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+                Terrain
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {(['Road', 'Trail', 'Track', 'Treadmill'] as const).map((t) => {
+                  const active = (input.terrain ?? 'Road') === t;
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setField('terrain', t)}
+                      className={`p-3 text-left border text-xs font-space transition-all ${
+                        active
+                          ? 'border-strava bg-strava/15 text-fg font-bold'
+                          : 'border-border bg-surface text-muted hover:text-fg'
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 8. Fluid Access */}
+            <div>
+              <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+                Fluid Access
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {(['Full', 'Limited', 'Self-Carry'] as const).map((f) => {
+                  const active = (input.fluid_access ?? 'Full') === f;
+                  return (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => setField('fluid_access', f)}
+                      className={`p-3 text-left border text-xs font-space transition-all ${
+                        active
+                          ? 'border-strava bg-strava/15 text-fg font-bold'
+                          : 'border-border bg-surface text-muted hover:text-fg'
+                      }`}
+                    >
+                      {f}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 9. Distance & Humidity (optional compact row) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 bg-surface border border-border">
+                <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+                  Distance (km, optional)
+                </label>
+                <input
+                  type="number"
+                  value={input.distance_km ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setField('distance_km', v === '' ? undefined : parseFloat(v));
+                  }}
+                  min={0}
+                  max={300}
+                  step={0.5}
+                  placeholder="e.g. 42.2"
+                  className="bg-carbon border border-border px-4 py-2 text-fg font-space text-sm w-full focus:border-strava outline-none placeholder:text-faint"
+                />
+              </div>
+
+              <div className="p-4 bg-surface border border-border">
+                <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
+                  Humidity (%, optional)
+                </label>
+                <input
+                  type="number"
+                  value={input.humidity_pct ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setField('humidity_pct', v === '' ? undefined : parseFloat(v));
+                  }}
+                  min={0}
+                  max={100}
+                  step={1}
+                  placeholder="e.g. 75"
+                  className="bg-carbon border border-border px-4 py-2 text-fg font-space text-sm w-full focus:border-strava outline-none placeholder:text-faint"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* 6. Session Type */}
-      <div>
-        <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
-          Session Type
-        </label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {(['Training', 'Race', 'Long Run', 'Recovery'] as const).map((t) => {
-            const active = (input.session_type ?? 'Training') === t;
-            return (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setField('session_type', t)}
-                className={`p-3 text-left border text-xs font-space transition-all ${
-                  active
-                    ? 'border-strava bg-strava/15 text-fg font-bold'
-                    : 'border-border bg-surface text-muted hover:text-fg'
-                }`}
-              >
-                {t}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 7. Terrain */}
-      <div>
-        <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
-          Terrain
-        </label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {(['Road', 'Trail', 'Track', 'Treadmill'] as const).map((t) => {
-            const active = (input.terrain ?? 'Road') === t;
-            return (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setField('terrain', t)}
-                className={`p-3 text-left border text-xs font-space transition-all ${
-                  active
-                    ? 'border-strava bg-strava/15 text-fg font-bold'
-                    : 'border-border bg-surface text-muted hover:text-fg'
-                }`}
-              >
-                {t}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 8. Fluid Access */}
-      <div>
-        <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
-          Fluid Access
-        </label>
-        <div className="grid grid-cols-3 gap-2">
-          {(['Full', 'Limited', 'Self-Carry'] as const).map((f) => {
-            const active = (input.fluid_access ?? 'Full') === f;
-            return (
-              <button
-                key={f}
-                type="button"
-                onClick={() => setField('fluid_access', f)}
-                className={`p-3 text-left border text-xs font-space transition-all ${
-                  active
-                    ? 'border-strava bg-strava/15 text-fg font-bold'
-                    : 'border-border bg-surface text-muted hover:text-fg'
-                }`}
-              >
-                {f}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 9. Distance & Humidity (optional compact row) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="p-4 bg-surface border border-border">
-          <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
-            Distance (km, optional)
-          </label>
-          <input
-            type="number"
-            value={input.distance_km ?? ''}
-            onChange={(e) => {
-              const v = e.target.value;
-              setField('distance_km', v === '' ? undefined : parseFloat(v));
-            }}
-            min={0}
-            max={300}
-            step={0.5}
-            placeholder="e.g. 42.2"
-            className="bg-carbon border border-border px-4 py-2 text-fg font-space text-sm w-full focus:border-strava outline-none placeholder:text-faint"
-          />
-        </div>
-
-        <div className="p-4 bg-surface border border-border">
-          <label className="block text-xs font-space tracking-wider uppercase text-strava font-bold mb-2">
-            Humidity (%, optional)
-          </label>
-          <input
-            type="number"
-            value={input.humidity_pct ?? ''}
-            onChange={(e) => {
-              const v = e.target.value;
-              setField('humidity_pct', v === '' ? undefined : parseFloat(v));
-            }}
-            min={0}
-            max={100}
-            step={1}
-            placeholder="e.g. 75"
-            className="bg-carbon border border-border px-4 py-2 text-fg font-space text-sm w-full focus:border-strava outline-none placeholder:text-faint"
-          />
-        </div>
+        )}
       </div>
       <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-[10px] font-space text-faint uppercase tracking-widest">

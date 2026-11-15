@@ -11,6 +11,8 @@ import {
   TrendingUp,
   Users,
   Target,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { TelemetryPayload } from '../../types/pyrofit';
 import { clearTelemetryEvents, getStoredTelemetryEvents } from '../../lib/telemetryLogger';
@@ -25,16 +27,22 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
 }) => {
   const [events, setEvents] = useState<TelemetryPayload[]>(getStoredTelemetryEvents());
   const [inspectedEvent, setInspectedEvent] = useState<TelemetryPayload | null>(null);
+  const [confirmClear, setConfirmClear] = useState(false);
+  const [csvNotice, setCsvNotice] = useState<string | null>(null);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   const refreshEvents = () => {
     setEvents(getStoredTelemetryEvents());
   };
 
   const handleClear = () => {
-    if (confirm('Clear all local telemetry events?')) {
-      clearTelemetryEvents();
-      setEvents([]);
+    if (!confirmClear) {
+      setConfirmClear(true);
+      return;
     }
+    clearTelemetryEvents();
+    setEvents([]);
+    setConfirmClear(false);
   };
 
   const handleDownloadJSON = () => {
@@ -48,7 +56,8 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
   const handleDownloadCSV = () => {
     const csv = sqliteEngine.exportTelemetryCSV();
     if (!csv) {
-      alert('No telemetry data to export.');
+      setCsvNotice('No telemetry data to export yet. Record some product clicks first.');
+      setTimeout(() => setCsvNotice(null), 4000);
       return;
     }
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -93,27 +102,6 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          <button
-            onClick={handleDownloadJSON}
-            className="px-3.5 py-2 border border-border bg-surface hover:text-fg text-muted text-xs font-space font-bold uppercase transition-colors flex items-center gap-1.5"
-            title="Download full JSON dataset"
-          >
-            <Download className="w-3.5 h-3.5" /> Export JSON
-          </button>
-          <button
-            onClick={handleDownloadCSV}
-            className="px-3.5 py-2 border border-border bg-surface hover:text-emerald-400 text-emerald-400 text-xs font-space font-bold uppercase transition-colors flex items-center gap-1.5"
-            title="Download telemetry as CSV"
-          >
-            <Download className="w-3.5 h-3.5" /> Export CSV
-          </button>
-          <button
-            onClick={handleClear}
-            className="px-3 py-2 border border-border bg-surface hover:text-red-400 text-faint text-xs font-space transition-colors"
-            title="Clear local logs"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-          </button>
           {onClose && (
             <button
               onClick={onClose}
@@ -124,6 +112,13 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
           )}
         </div>
       </div>
+
+      {/* CSV notice */}
+      {csvNotice && (
+        <div className="p-3 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-space flex items-center gap-2">
+          <span>ℹ</span> {csvNotice}
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -247,6 +242,58 @@ export const ManufacturerAnalyticsPortal: React.FC<ManufacturerAnalyticsPortalPr
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Advanced / Export accordion */}
+      <div className="border border-border mt-6">
+        <button
+          onClick={() => setAdvancedOpen(!advancedOpen)}
+          className="w-full flex items-center justify-between px-4 py-3 text-xs font-space font-bold uppercase tracking-wider text-muted hover:text-fg transition-colors"
+        >
+          <span>Advanced / Export</span>
+          {advancedOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </button>
+        {advancedOpen && (
+          <div className="border-t border-border p-4 space-y-4">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={handleDownloadJSON}
+                className="px-3.5 py-2 border border-border bg-surface hover:text-fg text-muted text-xs font-space font-bold uppercase transition-colors flex items-center gap-1.5"
+                title="Download full JSON dataset"
+              >
+                <Download className="w-3.5 h-3.5" /> Export JSON
+              </button>
+              <button
+                onClick={handleDownloadCSV}
+                className="px-3.5 py-2 border border-border bg-surface hover:text-emerald-400 text-emerald-400 text-xs font-space font-bold uppercase transition-colors flex items-center gap-1.5"
+                title="Download telemetry as CSV"
+              >
+                <Download className="w-3.5 h-3.5" /> Export CSV
+              </button>
+              <button
+                onClick={handleClear}
+                className={`px-3 py-2 border text-xs font-space transition-colors flex items-center gap-1.5 ${
+                  confirmClear
+                    ? 'border-red-500 bg-red-500/10 text-red-400 font-bold'
+                    : 'border-border bg-surface hover:text-red-400 text-faint'
+                }`}
+                title={confirmClear ? 'Click again to confirm clear' : 'Clear local logs'}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                {confirmClear ? 'Confirm?' : ''}
+              </button>
+              {confirmClear && (
+                <button
+                  onClick={() => setConfirmClear(false)}
+                  className="px-2 py-2 border border-border text-faint hover:text-fg text-xs font-space transition-colors"
+                  title="Cancel"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Raw JSON Inspection Modal */}

@@ -8,6 +8,10 @@ import {
   Calendar,
   AlertTriangle,
   CheckCircle2,
+  Bot,
+  Eye,
+  EyeOff,
+  Save,
 } from 'lucide-react';
 import {
   FullAthleteProfile,
@@ -24,6 +28,142 @@ import {
 } from '../../types/pyrofit';
 import { getOrCreateAthleteId } from '../../lib/telemetryLogger';
 import { sqliteEngine } from '../../lib/sqliteEngine';
+import { aiConfigManager, PROVIDER_DEFAULTS, type AIProvider } from '../../lib/aiConfig';
+
+// ── AI Config Card ────────────────────────────────────────────────────────────
+
+function AIConfigCard() {
+  const [provider, setProvider] = useState<AIProvider>(() => aiConfigManager.getConfig().provider);
+  const [apiKey, setApiKey] = useState(() => aiConfigManager.getConfig().apiKey ?? '');
+  const [baseURL, setBaseURL] = useState(() => aiConfigManager.getConfig().baseURL ?? '');
+  const [model, setModel] = useState(() => aiConfigManager.getConfig().model ?? '');
+  const [showKey, setShowKey] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleProviderChange = (p: AIProvider) => {
+    setProvider(p);
+    const defaults = PROVIDER_DEFAULTS[p];
+    setBaseURL(defaults.baseURL ?? '');
+    setModel(defaults.model ?? '');
+    if (p !== 'custom' && p !== 'freellm') setApiKey('');
+  };
+
+  const handleSave = () => {
+    aiConfigManager.setConfig({ provider, apiKey, baseURL, model });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  const isConfigured = aiConfigManager.isConfigured() && provider !== 'freellm';
+
+  return (
+    <div className="border-t border-border pt-8 mt-4">
+      <div className={sectionHeaderCls}>
+        <Bot className="w-4 h-4" /> AI SPORTS SCIENTIST — API CONFIGURATION
+      </div>
+      <div className="p-5 bg-surface border border-border space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-fg text-sm font-space font-bold">AI Copilot Provider</div>
+            <div className="text-faint text-xs font-light mt-0.5">
+              Powers the AI Sports Scientist chat and race-day briefings. Without a key, pre-written scientific fallbacks are used — no functionality is lost.
+            </div>
+          </div>
+          <span className={`text-[10px] font-space uppercase px-2 py-0.5 border ${
+            isConfigured
+              ? 'text-strava border-strava/40 bg-strava/10'
+              : 'text-faint border-border bg-carbon'
+          }`}>
+            {isConfigured ? '● Connected' : '○ Fallback mode'}
+          </span>
+        </div>
+
+        {/* Provider selector */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {(['openai', 'gemini', 'anthropic', 'mistral', 'custom'] as AIProvider[]).map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => handleProviderChange(p)}
+              className={`px-3 py-2 text-[11px] font-space uppercase tracking-wider border transition-colors ${
+                provider === p
+                  ? 'border-strava bg-strava/10 text-strava font-bold'
+                  : 'border-border text-muted hover:border-strava/40 hover:text-fg'
+              }`}
+            >
+              {p === 'openai' ? 'OpenAI' : p === 'gemini' ? 'Gemini' : p === 'anthropic' ? 'Anthropic' : p === 'mistral' ? 'Mistral' : 'Custom'}
+            </button>
+          ))}
+        </div>
+
+        {/* API Key */}
+        <div>
+          <label className="block text-xs font-space text-faint uppercase tracking-wider mb-1.5">API Key</label>
+          <div className="flex gap-2">
+            <input
+              type={showKey ? 'text' : 'password'}
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder={provider === 'openai' ? 'sk-...' : provider === 'gemini' ? 'AIza...' : provider === 'anthropic' ? 'sk-ant-...' : 'Your API key'}
+              className="flex-1 bg-carbon border border-border px-3 py-2 text-xs font-space text-fg focus:border-strava outline-none placeholder:text-faint"
+            />
+            <button
+              type="button"
+              onClick={() => setShowKey(!showKey)}
+              className="px-3 border border-border text-faint hover:text-fg transition-colors"
+            >
+              {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Base URL — shown for custom */}
+        {provider === 'custom' && (
+          <div>
+            <label className="block text-xs font-space text-faint uppercase tracking-wider mb-1.5">Base URL</label>
+            <input
+              type="text"
+              value={baseURL}
+              onChange={(e) => setBaseURL(e.target.value)}
+              placeholder="https://your-api.com/v1"
+              className="w-full bg-carbon border border-border px-3 py-2 text-xs font-space text-fg focus:border-strava outline-none placeholder:text-faint"
+            />
+          </div>
+        )}
+
+        {/* Model */}
+        <div>
+          <label className="block text-xs font-space text-faint uppercase tracking-wider mb-1.5">Model</label>
+          <input
+            type="text"
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            placeholder={PROVIDER_DEFAULTS[provider]?.model ?? 'model name'}
+            className="w-full bg-carbon border border-border px-3 py-2 text-xs font-space text-fg focus:border-strava outline-none placeholder:text-faint"
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-4">
+          <div className="text-[10px] font-space text-faint leading-relaxed max-w-sm">
+            Key stored in localStorage only. Never transmitted to Pyrofit servers. Calls go directly to the provider.
+          </div>
+          <button
+            type="button"
+            onClick={handleSave}
+            className={`flex items-center gap-1.5 px-5 py-2 text-xs font-space uppercase tracking-wider font-bold transition-colors ${
+              saved
+                ? 'bg-strava/20 text-strava border border-strava/40'
+                : 'bg-strava text-on-brand hover:bg-white'
+            }`}
+          >
+            <Save className="w-3.5 h-3.5" />
+            {saved ? 'Saved ✓' : 'Save Config'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ── Profile Completeness Helper ──────────────────────────────────────────────
 
@@ -40,6 +180,33 @@ export function computeProfileCompleteness(p: Partial<FullAthleteProfile>): numb
     return v !== undefined && v !== null && v !== '';
   }).length + (allergyFilled ? 1 : 0);
   return Math.round((filled / (fields.length + 1)) * 100);
+}
+
+export function getMissingProfileFields(p: Partial<FullAthleteProfile>): string[] {
+  const fieldMap: { key: keyof FullAthleteProfile; label: string }[] = [
+    { key: 'sport', label: 'Sport' },
+    { key: 'experience', label: 'Experience Level' },
+    { key: 'goal', label: 'Primary Goal' },
+    { key: 'weight_kg', label: 'Body Weight' },
+    { key: 'gi_sensitivity', label: 'GI Sensitivity' },
+    { key: 'diet', label: 'Diet Type' },
+    { key: 'caffeine_use', label: 'Caffeine Tolerance' },
+    { key: 'brand_origin_pref', label: 'Brand Preference' },
+    { key: 'budget_tier', label: 'Budget Tier' },
+    { key: 'anti_doping_status', label: 'Anti-Doping Status' },
+    { key: 'weekly_volume_hrs', label: 'Weekly Training Volume' },
+    { key: 'training_phase', label: 'Training Phase' },
+  ];
+  const missing: string[] = fieldMap
+    .filter(({ key }) => {
+      const v = p[key];
+      return v === undefined || v === null || v === '';
+    })
+    .map(({ label }) => label);
+  if (!Array.isArray(p.allergies)) {
+    missing.push('Allergies (confirm even if none)');
+  }
+  return missing;
 }
 
 // ── Props ────────────────────────────────────────────────────────────────────
@@ -202,6 +369,7 @@ export const AthleteProfileView: React.FC<AthleteProfileViewProps> = ({
     weekly_volume_hrs, training_phase,
   };
   const completeness = computeProfileCompleteness(partial);
+  const missingFields = getMissingProfileFields(partial);
 
   // ── Save handler ─────────────────────────────────────────────────────────
 
@@ -323,6 +491,21 @@ export const AthleteProfileView: React.FC<AthleteProfileViewProps> = ({
               style={{ width: `${completeness}%` }}
             />
           </div>
+          {completeness < 100 && missingFields.length > 0 && (
+            <div className="mt-2 text-left">
+              <div className="text-[9px] font-space text-faint uppercase tracking-wider mb-1">Still needed:</div>
+              <ul className="space-y-0.5">
+                {missingFields.slice(0, 4).map((f) => (
+                  <li key={f} className="text-[10px] font-space text-muted flex items-center gap-1">
+                    <span className="text-red-400">○</span> {f}
+                  </li>
+                ))}
+                {missingFields.length > 4 && (
+                  <li className="text-[10px] font-space text-faint">+{missingFields.length - 4} more</li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
@@ -702,11 +885,14 @@ export const AthleteProfileView: React.FC<AthleteProfileViewProps> = ({
         <button
           type="button"
           onClick={handleSave}
-          className="bg-strava italic-heavy text-on-brand py-3 px-10 text-sm font-black shadow-[0_8px_30px_rgba(204,255,0,0.25)] hover:shadow-[0_12px_40px_rgba(204,255,0,0.4)] hover:bg-white transition-all"
+          className="bg-strava italic-heavy text-on-brand py-3 px-10 text-sm font-black shadow-[0_8px_30px_rgba(255,107,26,0.25)] hover:shadow-[0_12px_40px_rgba(255,107,26,0.4)] hover:bg-white transition-all"
         >
           SAVE PROFILE
         </button>
       </div>
+
+      {/* ── AI Copilot Configuration ───────────────────────────────────────── */}
+      <AIConfigCard />
     </div>
   );
 };

@@ -16,6 +16,12 @@ import { Footer } from './components/Footer';
 import { PlanGeneratorModal } from './components/PlanGeneratorModal';
 import { PlanViewerModal } from './components/PlanViewerModal';
 import { CalculatorsModal } from './components/CalculatorsModal';
+import { FuelSchemesModal } from './components/FuelSchemesModal';
+import { InjuriesModal } from './components/InjuriesModal';
+import { ExercisesModal } from './components/ExercisesModal';
+import { SamplePlansModal } from './components/SamplePlansModal';
+import { EventCatalogueModal } from './components/EventCatalogueModal';
+import { ComparePlansModal } from './components/ComparePlansModal';
 import { PyrofitHub } from './components/pyrofit/PyrofitHub';
 import { GeneratedPlan } from './types/architect';
 import { generatePlan } from './lib/architectEngine';
@@ -26,6 +32,13 @@ export const App: React.FC = () => {
   const [generatorOpen, setGeneratorOpen] = useState(false);
   const [generatorMode, setGeneratorMode] = useState<'standard' | 'couch'>('standard');
   const [calculatorsOpen, setCalculatorsOpen] = useState(false);
+  const [fuelSchemesOpen, setFuelSchemesOpen] = useState(false);
+  const [injuriesOpen, setInjuriesOpen] = useState(false);
+  const [exercisesOpen, setExercisesOpen] = useState(false);
+  const [samplePlansOpen, setSamplePlansOpen] = useState(false);
+  const [eventCatalogueOpen, setEventCatalogueOpen] = useState(false);
+  const [comparePlansOpen, setComparePlansOpen] = useState(false);
+  const [compareInitialTab, setCompareInitialTab] = useState<'methodologies' | 'shoes' | 'watches'>('methodologies');
   const [viewerOpen, setViewerOpen] = useState(false);
   const [activePlan, setActivePlan] = useState<GeneratedPlan | null>(null);
 
@@ -38,6 +51,10 @@ export const App: React.FC = () => {
     setActivePlan(plan);
     setViewerOpen(true);
   };
+
+  const handleOpenCompareMethods = () => { setCompareInitialTab('methodologies'); setComparePlansOpen(true); };
+  const handleOpenShoeComparisons = () => { setCompareInitialTab('shoes'); setComparePlansOpen(true); };
+  const handleOpenWatchComparisons = () => { setCompareInitialTab('watches'); setComparePlansOpen(true); };
 
   // Demo sample plan generation
   const handleLoadSamplePlan = () => {
@@ -62,6 +79,9 @@ export const App: React.FC = () => {
         onOpenCalculators={() => setCalculatorsOpen(true)}
         onOpenPyrofit={() => setViewMode(viewMode === 'pyrofit' ? 'landing' : 'pyrofit')}
         isPyrofitActive={viewMode === 'pyrofit'}
+        onOpenFuelSchemes={() => setFuelSchemesOpen(true)}
+        onOpenInjuries={() => setInjuriesOpen(true)}
+        onOpenExercises={() => setExercisesOpen(true)}
       />
 
       {viewMode === 'pyrofit' ? (
@@ -106,6 +126,7 @@ export const App: React.FC = () => {
           <Hero
             onOpenGenerator={handleOpenGenerator}
             onOpenCalculators={() => setCalculatorsOpen(true)}
+            onOpenPyrofit={() => setViewMode('pyrofit')}
           />
 
           {/* Pyrofit Interactive Section Callout inside landing */}
@@ -125,7 +146,7 @@ export const App: React.FC = () => {
 
               <button
                 onClick={() => setViewMode('pyrofit')}
-                className="bg-strava text-on-brand italic-heavy py-4 px-10 text-base font-black shadow-[0_16px_48px_rgba(204,255,0,0.25)] hover:bg-white hover:shadow-[0_20px_50px_rgba(204,255,0,0.4)] transition-all whitespace-nowrap flex items-center gap-2"
+                className="bg-strava text-on-brand italic-heavy py-4 px-10 text-base font-black shadow-[0_16px_48px_rgba(255,107,26,0.25)] hover:bg-white hover:shadow-[0_20px_50px_rgba(255,107,26,0.4)] transition-all whitespace-nowrap flex items-center gap-2"
               >
                 <span>OPEN PYROFIT FUELING HUB</span>
                 <span>→</span>
@@ -142,7 +163,7 @@ export const App: React.FC = () => {
 
           <TrainingScience />
 
-          <WhatYouGet onOpenGenerator={handleOpenGenerator} />
+          <WhatYouGet onOpenGenerator={handleOpenGenerator} onOpenEventCatalogue={() => setEventCatalogueOpen(true)} onOpenCalculators={() => setCalculatorsOpen(true)} />
 
           <MoreThanAPlan onOpenGenerator={() => handleOpenGenerator('standard')} />
 
@@ -151,9 +172,17 @@ export const App: React.FC = () => {
           <GoDeeper
             onOpenCalculators={() => setCalculatorsOpen(true)}
             onOpenGenerator={handleOpenGenerator}
+            onOpenFuelSchemes={() => setFuelSchemesOpen(true)}
+            onOpenInjuries={() => setInjuriesOpen(true)}
+            onOpenExercises={() => setExercisesOpen(true)}
+            onOpenSamplePlans={() => setSamplePlansOpen(true)}
+            onOpenEventCatalogue={() => setEventCatalogueOpen(true)}
+            onOpenCompareMethods={handleOpenCompareMethods}
+            onOpenShoeComparisons={handleOpenShoeComparisons}
+            onOpenWatchComparisons={handleOpenWatchComparisons}
           />
 
-          <RunningLab onOpenGenerator={() => handleOpenGenerator('standard')} />
+          <RunningLab onOpenGenerator={() => handleOpenGenerator('standard')} onOpenComparisons={() => setComparePlansOpen(true)} />
 
           <FourLevers onOpenGenerator={() => handleOpenGenerator('standard')} />
 
@@ -177,23 +206,6 @@ export const App: React.FC = () => {
           <Flame className="w-4 h-4 fill-current" />
           <span>{viewMode === 'pyrofit' ? 'SWITCH TO RUN BLUEPRINT' : 'OPEN PYROFIT ENGINE'}</span>
         </button>
-
-        {activePlan ? (
-          <button
-            onClick={() => setViewerOpen(true)}
-            className="bg-surface border border-strava/40 text-strava italic-heavy px-4 py-2.5 shadow-xl hover:bg-strava hover:text-on-brand transition-all text-xs font-bold flex items-center gap-2"
-          >
-            <span className="w-2 h-2 rounded-full bg-strava animate-ping"></span>
-            VIEW ACTIVE PLAN ({activePlan.distance.toUpperCase()})
-          </button>
-        ) : (
-          <button
-            onClick={handleLoadSamplePlan}
-            className="bg-surface border border-border text-muted hover:text-fg italic-heavy px-4 py-2 shadow-xl hover:border-strava transition-all text-[11px]"
-          >
-            ⚡ PREVIEW SAMPLE RUN PLAN
-          </button>
-        )}
       </div>
 
       {/* Modals */}
@@ -213,6 +225,21 @@ export const App: React.FC = () => {
       <CalculatorsModal
         isOpen={calculatorsOpen}
         onClose={() => setCalculatorsOpen(false)}
+      />
+
+      <FuelSchemesModal
+        isOpen={fuelSchemesOpen}
+        onClose={() => setFuelSchemesOpen(false)}
+      />
+
+      <InjuriesModal
+        isOpen={injuriesOpen}
+        onClose={() => setInjuriesOpen(false)}
+      />
+
+      <ExercisesModal
+        isOpen={exercisesOpen}
+        onClose={() => setExercisesOpen(false)}
       />
     </div>
   );
