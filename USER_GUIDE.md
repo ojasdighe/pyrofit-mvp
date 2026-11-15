@@ -13,7 +13,7 @@
 5. [Tab 1 — Athlete Profile & AI Config](#5-tab-1--athlete-profile--ai-config)
 6. [Tab 2 — Session Planner (Express vs Elite Mode)](#6-tab-2--session-planner-express-vs-elite-mode)
 7. [Tab 3 — Product Compare](#7-tab-3--product-compare)
-8. [Tab 4 — Post-Workout Feedback](#8-tab-4--post-workout-feedback)
+8. [Tab 4 — Rate My Session](#8-tab-4--rate-my-session)
 9. [Tab 5 — B2B Analytics](#9-tab-5--b2b-analytics)
 10. [Feature Launcher — The 5 Power Tools](#10-feature-launcher--the-5-power-tools)
 11. [Gear & Running Lab Desk](#11-gear--running-lab-desk)
@@ -106,7 +106,7 @@ After saving your profile, the full Fuel Engine unlocks with a 5-tab workspace:
 | **Athlete Profile** | Enter physical details, dietary needs, goals, and event date. This personalises every calculation. |
 | **Session Planner** | Configure a workout in Express or Elite Mode and get your exact fueling protocol. |
 | **Product Compare** | Browse and filter all 39 products in the catalog. Compare nutrition panels and cost-efficiency. |
-| **Post-Workout** | Log how you felt after a session. The engine adjusts your targets for next time. |
+| **Rate My Session** | Log how you felt after a session. The engine adjusts your targets for next time. |
 | **History & Data** | View session history, feedback logs, product click telemetry, and export your data. |
 
 Work through them in order the first time. After that, the Session Planner is where you'll spend most of your time.
@@ -157,7 +157,7 @@ Currently affects product filtering (future versions will adjust formulas per sp
 **GI Sensitivity** — How sensitive is your stomach during exercise?
 - **None**: No gut issues. Full product range available.
 - **Mild**: Occasional nausea or minor discomfort.
-- **Severe / Bloating**: Locks the product catalog to Hydrogel and Isotonic formulations only. These digest without causing osmotic distress in the gut.
+- **Sensitive Gut**: Locks the product catalog to Hydrogel and Isotonic formulations only. These digest without causing osmotic distress in the gut.
 
 **Medical Flags** — Tick any that apply:
 - **Hypertension**: May affect sodium targets. See your sports physician.
@@ -471,7 +471,7 @@ Returns you to Screen 1 without losing your current settings. Adjust any paramet
 
 ---
 
-#### Post-Workout Survey Button
+#### Rate My Session Button
 
 Opens the adaptive feedback modal directly from the strategy view. After your session, click this to log how you felt and trigger the adaptive learning loop.
 
@@ -556,9 +556,9 @@ Every **BUY FROM OFFICIAL SITE** button:
 
 ---
 
-## 7. Tab 4 — Post-Workout Feedback
+## 7. Tab 4 — Rate My Session
 
-This tab (and the floating **Post-Workout Survey** modal) is where the adaptive learning loop lives.
+This tab (and the floating **Rate My Session** modal) is where the adaptive learning loop lives.
 
 After every session, return here and log one of four outcomes:
 
@@ -605,7 +605,7 @@ After selecting an outcome, an **AI Physiological Explanation** button appears. 
 At the top of the feedback view you can see your live multipliers:
 - **Carb Multiplier**: starts at 1.00×, increases with each Energy Crash logged
 - **Sodium Multiplier**: starts at 1.00×, increases with each Cramping event logged
-- **Hydrogel Lock**: OFF (normal) or ACTIVE (locked after a Bloating event)
+- **Gut-Safe Filter**: OFF (normal) or ACTIVE (locked after a Bloating event)
 
 ---
 
@@ -785,7 +785,7 @@ The simulator shows the delta (change) for each target — a red arrow down mean
 
 ---
 
-### Post-Workout Survey (purple rotation)
+### Rate My Session (purple rotation)
 
 A quick-access shortcut to the adaptive feedback modal, identical to Tab 4 but as a floating overlay. Appears instantly from any tab.
 
@@ -996,7 +996,7 @@ That's it. You now know the core Pyrofit workflow.
 4. **Phase 01**: 60–65g carbs (1.0 × 65kg) 45 mins before start. Have a banana + gel.
 5. **Phase 02**: ~45g/hr carbs, ~600mg/hr sodium. Take one gel (22g carbs) at 45 min and 90 min. Drink electrolyte drink at every aid station.
 6. **Post-race**: Within 30 mins, 22g protein + 77g carbs.
-7. After the race: Return to **Post-Workout tab**, log your outcome (Optimal / Cramped / Crashed / Bloated). The system will adjust next session.
+7. After the race: Return to **Rate My Session tab**, log your outcome (Optimal / Cramped / Crashed / Bloated). The system will adjust next session.
 
 ---
 
@@ -1040,7 +1040,7 @@ That's it. You now know the core Pyrofit workflow.
 Open the app and click **"OPEN PYROFIT"**. You'll see a welcome card with three steps. Follow it — fill your profile, then configure a session, then calculate. The entire first workflow takes about 3–5 minutes. All advanced features unlock automatically after your first calculation.
 
 **Q: Why are some buttons greyed out when I first open the Hub?**  
-The AI Sports Scientist, Live Timer, Custom Fuel Stack, Race Simulator, and Post-Workout Survey buttons are intentionally locked until you have calculated at least one session. This keeps the interface clean on first use. Once you hit Calculate for the first time, they all unlock and stay unlocked.
+The AI Sports Scientist, Live Timer, Custom Fuel Stack, Race Simulator, and Rate My Session buttons are intentionally locked until you have calculated at least one session. This keeps the interface clean on first use. Once you hit Calculate for the first time, they all unlock and stay unlocked.
 
 **Q: What does "Advanced Options" mean?**  
 The Session Planner shows three required fields by default: Duration, Intensity, and Temperature. Click the **Advanced Options** toggle to reveal optional settings like Cramping Susceptibility, Training Phase, and Altitude. These refine your fueling calculation but are not required for a basic session plan.
